@@ -37,7 +37,7 @@ body {
 /* Home.css */
 .event-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
   padding: 0 20px;
 }
@@ -60,6 +60,12 @@ body {
 .event-link{
 text-decoration:none;
 color:#27233a;    
+
+}
+
+.event-link:hover{
+color: #735cdd;
+text-decoration: none;
 
 }
 
