@@ -1,24 +1,48 @@
-import React, { useState } from 'react';
-import '../styles/nav.css'; // Importing styles specific to the Navigation component
+import React, { useState, useEffect, useRef } from 'react';
+import '../styles/navigation.css'; // Importing styles specific to the Navigation component
 
-const authModal = () => {
+const LoginModal = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setSignupModalOpen] = useState(false);
 
+  const loginModalRef = useRef(null);
+  const signupModalRef = useRef(null);
+
   const handleOpenLoginModal = () => setLoginModalOpen(true);
   const handleCloseLoginModal = () => setLoginModalOpen(false);
-  
+
   const handleOpenSignupModal = () => setSignupModalOpen(true);
   const handleCloseSignupModal = () => setSignupModalOpen(false);
+
+  const handleOutsideClick = (event) => {
+    if (isLoginModalOpen && loginModalRef.current && !loginModalRef.current.contains(event.target)) {
+      setLoginModalOpen(false);
+    }
+    if (isSignupModalOpen && signupModalRef.current && !signupModalRef.current.contains(event.target)) {
+      setSignupModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener to detect clicks outside the modal
+    window.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      // Cleanup event listener when the component unmounts
+      window.removeEventListener('click', handleOutsideClick);
+    };
+  }, [isLoginModalOpen, isSignupModalOpen]);
 
   return (
     <>
       {/* Log in modal start */}
       {isLoginModalOpen && (
         <div id="login-modal" className="modal">
-          <form className="modal-content animate" id="login-form">
+          <form className="modal-content animate" id="login-form" ref={loginModalRef}>
             <div className="imgcontainer">
-              <span onClick={handleCloseLoginModal} className="close" title="Close Modal">&times;</span>
+              <span onClick={handleCloseLoginModal} className="close" title="Close Modal">
+                &times;
+              </span>
             </div>
             <div className="modal-container">
               <span className="modal-headline">
@@ -64,9 +88,11 @@ const authModal = () => {
       {/* Sign up modal start */}
       {isSignupModalOpen && (
         <div id="signup-modal" className="modal">
-          <form className="modal-content animate" id="signup-form">
+          <form className="modal-content animate" id="signup-form" ref={signupModalRef}>
             <div className="imgcontainer">
-              <span onClick={handleCloseSignupModal} className="close" title="Close Modal">&times;</span>
+              <span onClick={handleCloseSignupModal} className="close" title="Close Modal">
+                &times;
+              </span>
             </div>
 
             <div className="modal-container">
@@ -122,4 +148,4 @@ const authModal = () => {
   );
 };
 
-export default authModal;
+export default LoginModal;
