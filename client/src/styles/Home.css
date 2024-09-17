@@ -91,3 +91,27 @@ text-decoration: none;
   border: 1px solid #27233a;
 
 }
+
+
+@media only screen and (max-width: 730px) {
+  .filters-container{
+  display: flex;
+  flex-direction: column;
+  width:250px;
+margin:auto;
+
+  }
+
+.filters-container label {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-container input[type="number"],
+.filters-container input[type="date"] {
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #27233a;
+
+}
+}
