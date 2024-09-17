@@ -1,6 +1,14 @@
+:root {
+  --purple-color: #735CDD;
+  --background-color: #EFD9CE;
+  --navy-color: #27233A;
+  --lightPurple-color: #DEC0F1;
+  --accent-color: #A44A3F;
+}
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
-   ========================================================================== */
+   ==============s============================================================ */
 /**
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.

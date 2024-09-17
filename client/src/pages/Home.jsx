@@ -1,42 +1,67 @@
-import { Link } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { QUERY_MATCHUPS } from '../utils/queries';
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_EVENTS } from "../utils/queries"; // Import the query for fetching events
+import "../styles/Home.css";
+
+const dummyEvents = [
+  { id: "1", name: "Concert A", location: "Venue A", date: "2024-09-30", price: 49.99 },
+  { id: "2", name: "Concert B", location: "Venue B", date: "2024-10-05", price: 59.99 },
+  { id: "3", name: "Concert C", location: "Venue C", date: "2024-10-10", price: 39.99 },
+  { id: "4", name: "Concert D", location: "Venue D", date: "2024-10-15", price: 29.99 },
+];
+
 
 const Home = () => {
-  const { loading, data } = useQuery(QUERY_MATCHUPS, {
-    fetchPolicy: "no-cache"
-  });
+  const [search, setSearch] = useState('');
+  const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
 
-  const matchupList = data?.matchups || [];
+  // Function to handle search action
+  const handleSearch = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    console.log('Search initiated for:', search);
+    // Add your search logic here (e.g., filtering events based on the search input)
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  // Filter events based on search input
+
+  const filteredEvents = dummyEvents.filter(event =>
+    event.name.toLowerCase().includes(search.toLowerCase())
+  );
+  // const filteredEvents = data.events.filter(event =>
+  //   event.name.toLowerCase().includes(search.toLowerCase())
+  // );
 
   return (
-    <div className="card bg-white card-rounded w-50">
-      <div className="card-header bg-dark text-center">
-        <h1>Welcome to Tech Matchup!</h1>
+    <div>
+      {/* Search Bar */}
+      <div>
+        <form onSubmit={handleSearch} className="search-container">
+          <input
+            type="text"
+            id="search-bar"
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </form>
       </div>
-      <div className="card-body m-5">
-        <h2>Here is a list of matchups you can vote on:</h2>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <ul className="square">
-            {matchupList.map((matchup) => {
-              return (
-                <li key={matchup._id}>
-                  <Link to={{ pathname: `/matchup/${matchup._id}` }}>
-                    {matchup.tech1} vs. {matchup.tech2}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+
+      {/* List of Events */}
+      <div className="eventList-headline">
+        <h1>Upcoming Events</h1>
       </div>
-      <div className="card-footer text-center m-3">
-        <h2>Ready to create a new matchup?</h2>
-        <Link to="/matchup">
-          <button className="btn btn-lg btn-danger">Create Matchup!</button>
-        </Link>
+      <div className="event-container">
+        {filteredEvents.map((event) => (
+          <div key={event.id} className="event-card">
+            <h2>{event.name}</h2>
+            <p>
+              {event.date} - {event.location}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
