@@ -48,14 +48,14 @@ const LoginModal = () => {
               <span className="modal-headline">
                 <h1>Sign In</h1>
               </span>
-              <label htmlFor="username"><b>Username</b></label>
+              <label htmlFor="login-email"><b>Email</b></label>
               <input
-                type="text"
+                type="email"
                 className="modal-input"
-                placeholder="Enter Username"
-                name="username"
-                id="username"
-                autoComplete="username"
+                placeholder="Enter Email"
+                name="email"
+                id="login-email"
+                autoComplete="email"
                 required
               />
               <label htmlFor="password"><b>Password</b></label>
@@ -99,16 +99,6 @@ const LoginModal = () => {
               <span className="modal-headline">
                 <h1>Sign Up</h1>
               </span>
-              <label htmlFor="signup-username"><b>Username</b></label>
-              <input
-                type="text"
-                className="modal-input"
-                placeholder="Enter Username"
-                name="username"
-                id="signup-username"
-                autoComplete="username"
-                required
-              />
               <label htmlFor="signup-email"><b>Email</b></label>
               <input
                 type="email"
