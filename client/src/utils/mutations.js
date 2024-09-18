@@ -21,3 +21,40 @@ export const CREATE_VOTE = gql`
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+  mutation loginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password) {
+      token
+      user {
+        id
+        username
+        email
+      }
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        id
+        username
+        email
+      }
+    }
+  }
+`;
+
+const handleSubmit = async () => {
+  try {
+    const { data } = await createUser({
+      variables: { username, email, password }
+    });
+    console.log('User created:', data.createUser.user);
+  } catch (err) {
+    console.error(err);
+  }
+};

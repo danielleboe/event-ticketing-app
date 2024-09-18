@@ -34,7 +34,11 @@ type Purchase {
     updatedAt: String
 url: String!
   }
-
+type AuthPayload {
+  token: String
+  user: User
+}
+  
   type Query {
     events: [Event]
     event(id: ID!): Event
@@ -48,6 +52,13 @@ url: String!
       email: String!
       password: String!
     ): User
+
+       createUser(
+      username: String!
+      email: String!
+      password: String!
+    ): AuthPayload
+
 
     addEvent(
       name: String!

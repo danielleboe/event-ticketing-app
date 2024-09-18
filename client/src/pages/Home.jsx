@@ -2,6 +2,7 @@ import { useState } from "react";
 // import { useQuery } from "@apollo/client";
 // import { GET_EVENTS } from "../utils/queries"; // Import the query for fetching events
 import "../styles/Home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [search, setSearch] = useState("");
@@ -141,7 +142,13 @@ const Home = () => {
 
   return (
     <div>
-      {/* Search Bar */}
+    {/* Login Button Container */}
+    {/* Ensures the login button is centered and placed just above the search bar */}
+    <div className="login-button-container">
+      <Link to="/login">
+        <button className="login-button">Login</button>
+      </Link>
+    </div>
       <div>
         <form onSubmit={handleSearch} className="search-container">
           <input

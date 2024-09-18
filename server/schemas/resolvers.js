@@ -1,4 +1,5 @@
 const { Users, Events } = require('../models');
+const { signToken } = require('../utils/auth');
 
 const resolvers = {
   Query: {
@@ -11,6 +12,19 @@ const resolvers = {
     addUser: async (_, args) => {
       const newUser = new Users(args);
       return await newUser.save();
+    },
+    createUser: async (_, { username, email, password }) => {
+      try {
+        const user = await Users.create({ username, email, password });
+        const token = signToken(user);
+        return { token, user };
+      } catch (error) {
+        if (error.code === 11000) {
+          // Duplicate key error (E11000)
+          throw new Error('A user with that username or email already exists.');
+        }
+        throw new Error('Error creating user');
+      }
     },
     addToCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
