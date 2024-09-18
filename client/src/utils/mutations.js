@@ -1,23 +1,82 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_MATCHUP = gql`
-  mutation createMatchup($tech1: String!, $tech2: String!) {
-    createMatchup(tech1: $tech1, tech2: $tech2) {
-      _id
-      tech1
-      tech2
+// Mutation to create a new event
+export const ADD_EVENT = gql`
+  mutation AddEvent(
+    $name: String!
+    $description: String!
+    $venue: String!
+    $location: String!
+    $eventDate: String!
+    $eventTime: String!
+    $tags: [String]
+    $price: Number!
+  ) {
+    addEvent(
+      name: $name
+      description: $description
+      venue: $venue
+      location: $location
+      eventDate: $eventDate
+      eventTime: $eventTime
+      tags: $tags
+      price: $price
+    ) {
+      id
+      name
+      description
+      venue
+      location
+      eventDate
+      eventTime
+      tags
+      price
+      createdby
     }
   }
 `;
 
-export const CREATE_VOTE = gql`
-  mutation createVote($_id: String!, $techNum: Int!) {
-    createVote(_id: $_id, techNum: $techNum) {
-      _id
-      tech1
-      tech2
-      tech1_votes
-      tech2_votes
+// Mutation to update an existing event
+export const UPDATE_EVENT = gql`
+  mutation UpdateEvent(
+    $id: ID!
+    $name: String
+    $description: String
+    $venue: String
+    $location: String
+    $eventDate: String
+    $eventTime: String
+    $tags: [String]
+    $price: Number
+  ) {
+    updateEvent(
+      id: $id
+      name: $name
+      description: $description
+      venue: $venue
+      location: $location
+      eventDate: $eventDate
+      eventTime: $eventTime
+      tags: $tags
+      price: $price
+    ) {
+      id
+      name
+      description
+      venue
+      location
+      eventDate
+      eventTime
+      tags
+      price
+      createdby
     }
+  }
+`;
+
+// Mutation to delete an event
+export const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: ID!) {
+    deleteEvent(id: $id)
   }
 `;
