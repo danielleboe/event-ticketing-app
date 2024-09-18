@@ -1,0 +1,61 @@
+/* client/src/components/UserProfile.css */
+.user-profile {
+    background-color: var(--background-color);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+  }
+  
+  .user-profile h1 {
+    color: var(--navy-color);
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .user-profile p {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  
+  .user-profile h2 {
+    color: var(--navy-color);
+    font-size: 1.5rem;
+    margin-top: 20px;
+  }
+  
+  .user-profile ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .user-profile li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .user-profile li h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .user-profile li p {
+    margin: 5px 0;
+  }
+  
+  .user-profile li a {
+    color: var(--navy-color);
+    text-decoration: none;
+  }
+  
+  .user-profile li a:hover {
+    text-decoration: underline;
+  }

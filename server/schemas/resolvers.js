@@ -32,7 +32,14 @@ const resolvers = {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
       const events = await Events.find({ _id: { $in: user.cart } });
-      user.purchaseHistory = [...Users.purchaseHistory, ...Users.cart];
+      // Update purchaseHistory to include purchaseDate and event URL
+      user.purchaseHistory = [
+        ...user.purchaseHistory,
+        ...user.cart.map(eventId => ({
+          eventId,
+          purchaseDate: new Date().toISOString()
+        }))
+      ];
       user.cart = [];
       await user.save();
       return user;
@@ -43,12 +50,16 @@ const resolvers = {
     },
   },
   User: {
-    purchaseHistory: async (user) => await Events.find({ _id: { $in: Users.purchaseHistory } }),
-    createdEventHistory: async (user) => await Events.find({ _id: { $in: Users.createdEventHistory } }),
-    cart: async (user) => await Events.find({ _id: { $in: Users.cart } }),
+    // Update purchaseHistory resolver to include purchaseDate and event URL
+    purchaseHistory: async (user) => await Events.find({ _id: { $in: user.purchaseHistory.map(p => p.eventId) } }).then(events => events.map(event => ({
+      ...event.toObject(),
+      purchaseDate: user.purchaseHistory.find(p => p.eventId.toString() === event._id.toString()).purchaseDate
+    }))),
+    createdEventHistory: async (user) => await Events.find({ _id: { $in: user.createdEventHistory } }),
+    cart: async (user) => await Events.find({ _id: { $in: user.cart } }),
   },
   Event: {
-    createdBy: async (event) => await Users.find({ _id: { $in: Events.createdBy } }),
+    createdBy: async (event) => await Users.find({ _id: { $in: event.createdBy } }),
   }
 };
 
