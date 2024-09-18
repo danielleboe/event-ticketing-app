@@ -37,6 +37,8 @@ const EventForm = ({ eventId, onEventDeleted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(`eventid`,eventId);
+    console.log(`eventdata`,eventData);
     if (eventId) {
       await updateEvent({ variables: { id: eventId, ...eventData } });
     } else {
@@ -56,7 +58,9 @@ const EventForm = ({ eventId, onEventDeleted }) => {
   };
 
   return (
+    <section className="event-form">
     <form onSubmit={handleSubmit}>
+      <h1>Create New Event</h1>
       <label>
         Event Name:
         <input name="name" value={eventData.name || ''} onChange={handleChange} required />
@@ -128,6 +132,7 @@ const EventForm = ({ eventId, onEventDeleted }) => {
         </button>
       )}
     </form>
+    </section>
   );
 };
 

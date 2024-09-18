@@ -48,10 +48,10 @@ const resolvers = {
       const newEvent = new Events(args);
       return await newEvent.save();
     },
-    updateEvent: async (_, { id, ...updates }) => {
+    updateEvent: async (_, { eventId, ...updates }) => {
       return await Events.findByIdAndUpdate(id, updates, { new: true });
     },
-    deleteEvent: async (_, { id }) => {
+    deleteEvent: async (_, { eventId }) => {
       await Events.findByIdAndDelete(id);
       return true;
     },

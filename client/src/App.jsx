@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
-import EventForm from './pages/eventForm';
+import EventForm from './pages/EventForm';
 import UserProfile from './components/UserProfile'; // Import the UserProfile component
 
 function App() {

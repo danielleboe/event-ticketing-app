@@ -20,7 +20,7 @@ type Purchase {
   }
 
   type Event {
-    id: ID!
+    eventId: ID!
     name: String!
     description: String!
     venue: String!
@@ -50,7 +50,7 @@ url: String!
     ): User
 
     addEvent(
-     id: ID!
+     eventId: ID!
       name: String!
       description: String!
       venue: String!
@@ -63,7 +63,7 @@ url: String!
     ): Event
 
     updateEvent(
-      id: ID!
+      eventId: ID!
       name: String
       description: String
       venue: String
@@ -76,7 +76,7 @@ url: String!
     ): Event
 
     deleteEvent(
-      id: ID!
+      eventId: ID!
     ): Event
 
     addToCart(
