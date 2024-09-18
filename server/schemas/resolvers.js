@@ -4,8 +4,8 @@ const resolvers = {
   Query: {
     users: async () => await Users.find(),
     user: async (_, { id }) => await Users.findById(id),
-    events: async () => await Events.find().populate('createdBy'),
-    event: async (_, { id }) => await Events.findById(id).populate('createdBy'),
+    events: async () => await Events.find(),
+    event: async (_, { id }) => await Events.findById(id),
   },
   Mutation: {
     addUser: async (_, args) => {

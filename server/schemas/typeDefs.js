@@ -19,7 +19,7 @@ const typeDefs = `
     location: String!
     eventDate: String!
     eventTime: String!
-    tags: String!
+    tags: [String!]
     price: Float!
     createdBy: [User]
     createdAt: String
@@ -48,7 +48,7 @@ const typeDefs = `
       location: String!
       eventDate: String!
       eventTime: String!
-      tags: String!
+      tags: [String!]
       price: Float!
     ): Event
 
