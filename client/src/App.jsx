@@ -2,7 +2,9 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Search from './pages/Search';
+import EditEventForm from './pages/EditEventForm';
+import EventPage from './pages/EventPage';
+import EventForm from './pages/eventForm';
 import UserProfile from './components/UserProfile'; // Import the UserProfile component
 
 function App() {
@@ -16,8 +18,10 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/search" element={<Search />} />
       <Route path="/profile" element={<UserProfile user={dummyUser} />} /> {/* Add the route for the user profile */}
+      <Route path="/events/:id" element={<EventPage />} />
+      <Route path="/events/new" element={<EventForm />} />
+      <Route path="/events/edit/:id" element={<EditEventForm />} />
     </Routes>
   );
 }

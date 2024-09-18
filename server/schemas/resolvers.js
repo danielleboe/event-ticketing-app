@@ -45,9 +45,18 @@ const resolvers = {
       return user;
     },
     addEvent: async (_, args) => {
-      const newEvent = new Event(args);
+      const newEvent = new Events(args);
       return await newEvent.save();
     },
+    updateEvent: async (_, { id, ...updates }) => {
+      return await Events.findByIdAndUpdate(id, updates, { new: true });
+    },
+    deleteEvent: async (_, { id }) => {
+      await Events.findByIdAndDelete(id);
+      return true;
+    },
+
+
   },
   User: {
     // Update purchaseHistory resolver to include purchaseDate and event URL

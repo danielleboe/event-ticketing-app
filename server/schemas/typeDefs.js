@@ -50,6 +50,7 @@ url: String!
     ): User
 
     addEvent(
+     id: ID!
       name: String!
       description: String!
       venue: String!
@@ -59,6 +60,23 @@ url: String!
       tags: [String!]
       price: Float!
       url: String!
+    ): Event
+
+    updateEvent(
+      id: ID!
+      name: String
+      description: String
+      venue: String
+      location: String
+      eventDate: String
+      eventTime: String
+      tags: [String!]
+      price: Float
+      url: String
+    ): Event
+
+    deleteEvent(
+      id: ID!
     ): Event
 
     addToCart(

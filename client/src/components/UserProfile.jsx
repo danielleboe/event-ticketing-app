@@ -1,5 +1,5 @@
 // client/src/components/UserProfile.jsx
-import React from 'react';
+// import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_PURCHASE_HISTORY } from '../utils/queries';
 import './UserProfile.css'; // Import the CSS file for specific styles
