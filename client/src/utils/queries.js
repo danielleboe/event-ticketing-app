@@ -1,12 +1,17 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_EVENTS = gql`
   query GetEvents {
     events {
       id
       name
-      date
+      description
+      venue
       location
+      eventDate
+      eventTime
+      tags
+      price
     }
   }
 `;
@@ -16,8 +21,29 @@ export const SEARCH_EVENTS = gql`
     searchEvents(keyword: $keyword) {
       id
       name
-      date
-      location
+       url
+        purchaseDate
+    }
+  }
+`;
+
+// Add a query to fetch the user's purchase history
+export const GET_USER_PURCHASE_HISTORY = gql`
+  query GetUserPurchaseHistory($id: ID!) {
+    user(id: $id) {
+      purchaseHistory {
+        id
+        name
+        date
+        url
+        purchaseDate
+      }
+      createdEventHistory { 
+        id
+        name
+        date
+        url
+      }
     }
   }
 `;

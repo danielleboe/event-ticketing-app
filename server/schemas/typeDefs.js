@@ -4,11 +4,19 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
-    purchaseHistory: [Event]
+    purchaseHistory: [Purchase] 
     createdEventHistory: [Event]
     cart: [Event]
     createdAt: String
     updatedAt: String
+  }
+
+type Purchase {  
+    eventId: ID!
+    name: String!
+    date: String!
+    url: String!
+    purchaseDate: String!
   }
 
   type Event {
@@ -19,12 +27,12 @@ const typeDefs = `
     location: String!
     eventDate: String!
     eventTime: String!
-    tags: String!
+    tags: [String!]
     price: Float!
     createdBy: [User]
     createdAt: String
     updatedAt: String
-
+url: String!
   }
 
   type Query {
@@ -48,8 +56,9 @@ const typeDefs = `
       location: String!
       eventDate: String!
       eventTime: String!
-      tags: String!
+      tags: [String!]
       price: Float!
+      url: String!
     ): Event
 
     addToCart(
