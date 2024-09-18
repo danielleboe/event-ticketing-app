@@ -1,25 +1,69 @@
 const typeDefs = `
-  type Tech {
-    _id: ID!
-    name: String!
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    password: String!
+    purchaseHistory: [Event]
+    createdEventHistory: [Event]
+    cart: [Event]
+    createdAt: String
+    updatedAt: String
   }
 
-  type Matchup {
-    _id: ID!
-    tech1: String!
-    tech2: String!
-    tech1_votes: Int
-    tech2_votes: Int
+  type Event {
+    id: ID!
+    name: String!
+    description: String!
+    venue: String!
+    location: String!
+    eventDate: String!
+    eventTime: String!
+    tags: String!
+    price: Float!
+    createdBy: [User]
+    createdAt: String
+    updatedAt: String
   }
 
   type Query {
-    tech: [Tech]
-    matchups(_id: String): [Matchup]
+    events: [Event]
+    event(id: ID!): Event
+    users: [User]
+    user(id: ID!): User
   }
 
   type Mutation {
-    createMatchup(tech1: String!, tech2: String!): Matchup
-    createVote(_id: String!, techNum: Int!): Matchup
+    addUser(
+      username: String!
+      email: String!
+      password: String!
+    ): User
+
+    addEvent(
+      name: String!
+      description: String!
+      venue: String!
+      location: String!
+      eventDate: String!
+      eventTime: String!
+      tags: String!
+      price: Float!
+    ): Event
+
+    addToCart(
+      userId: ID!, 
+      eventId: ID!
+    ): User
+
+    removeFromCart(
+      userId: ID!,
+      eventId: ID!
+    ): User
+
+    purchaseCart(
+      userId: ID!
+    ): User
   }
 `;
 
