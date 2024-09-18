@@ -47,9 +47,16 @@ const usersSchema = new Schema(
 );
 
 usersSchema.pre('save', async function (next) {
+  console.log('Pre-save hook called');
   if (this.isNew || this.isModified('password')) {
-    const saltRounds = 10;
-    this.password = await bcrypt.hash(this.password, saltRounds);
+    try {
+      const saltRounds = 10;
+      this.password = await bcrypt.hash(this.password, saltRounds);
+      console.log('Hashed password:', this.password);
+    } catch (err) {
+      console.error('Error hashing password:', err);
+      return next(err);
+    }
   }
   next();
 });
