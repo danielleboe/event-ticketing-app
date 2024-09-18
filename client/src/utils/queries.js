@@ -21,8 +21,29 @@ export const SEARCH_EVENTS = gql`
     searchEvents(keyword: $keyword) {
       id
       name
-      date
-      location
+       url
+        purchaseDate
+    }
+  }
+`;
+
+// Add a query to fetch the user's purchase history
+export const GET_USER_PURCHASE_HISTORY = gql`
+  query GetUserPurchaseHistory($id: ID!) {
+    user(id: $id) {
+      purchaseHistory {
+        id
+        name
+        date
+        url
+        purchaseDate
+      }
+      createdEventHistory { 
+        id
+        name
+        date
+        url
+      }
     }
   }
 `;
