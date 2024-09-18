@@ -1,6 +1,6 @@
 const typeDefs = `
   type User {
-    id: ID!
+    _id: ID!
     username: String!
     email: String!
     password: String!
@@ -47,11 +47,6 @@ type AuthPayload {
   }
 
   type Mutation {
-    addUser(
-      username: String!
-      email: String!
-      password: String!
-    ): User
 
        createUser(
       username: String!

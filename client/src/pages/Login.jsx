@@ -28,7 +28,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await createUser({
-        variables: { email, password },
+        variables: { username, email, password },
       });
       // Handle successful registration (e.g., save token, redirect to profile)
       console.log(data);
