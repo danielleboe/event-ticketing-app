@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
-import { ADD_EVENT, UPDATE_EVENT, DELETE_EVENT, GET_EVENTS } from "../utils/queries"; 
+import { useNavigate, useParams } from 'react-router-dom'; // Import the useNavigate hook
+import { ADD_EVENT, UPDATE_EVENT, DELETE_EVENT, GET_EVENT } from "../utils/queries"; 
 
-const EventForm = ({ eventId, onEventDeleted }) => {
+const EventForm = ({ onEventDeleted }) => {
+  const { eventId } = useParams(); // Extract eventId from URL
   const [eventData, setEventData] = useState({
+    id: 0,
     name: '',
     description: '',
     venue: '',
@@ -15,21 +17,22 @@ const EventForm = ({ eventId, onEventDeleted }) => {
     price: 0,
     url: ''
   });
-
+  console.log(eventId);
   const navigate = useNavigate(); // Initialize the navigate function
 
   const [addEvent] = useMutation(ADD_EVENT);
   const [updateEvent] = useMutation(UPDATE_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT);
 
-  const { data } = useQuery(GET_EVENTS, { variables: { id: eventId }, skip: !eventId });
+  const { data } = useQuery(GET_EVENT, { variables: { id: eventId }, skip: !eventId });
 
+  console.log(`eventid!!!!!!!!!!`,eventId);
   useEffect(() => {
     if (data) {
       setEventData(data.getEvent);
     }
   }, [data]);
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData((prev) => ({ ...prev, [name]: value }));
@@ -37,16 +40,30 @@ const EventForm = ({ eventId, onEventDeleted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`eventid`,eventId);
-    console.log(`eventdata`,eventData);
-    if (eventId) {
-      await updateEvent({ variables: { id: eventId, ...eventData } });
-    } else {
-      await addEvent({ variables: eventData });
+    console.log(`eventid`, eventId);
+    console.log(`eventdata`, eventData);
+    try {
+      if (eventId) {
+        // Update existing event
+        await updateEvent({ variables: { id: eventId, ...eventData } });
+      } else {
+        // Create a new event
+        const { data } = await addEvent({ variables: eventData });
+        // eslint-disable-next-line no-const-assign
+        eventId = data?.addEventEvent?.id; // Make sure this matches your server's response field
+      }
+  
+      // Navigate only if eventId is valid
+      if (eventId) {
+        navigate(`/events/${eventId}`);
+      } else {
+        console.error('Failed to get event ID');
+      }
+    } catch (error) {
+      console.error('Error saving event:', error);
     }
-    // Redirect to the event page after saving
-    navigate(`/events/${eventId || eventData.id}`);
   };
+  
 
   const handleDelete = async () => {
     if (eventId) {
@@ -114,7 +131,7 @@ const EventForm = ({ eventId, onEventDeleted }) => {
       
       <label>
         Price:
-        <input type="number" name="price" value={eventData.price || 0} onChange={handleChange} required />
+        <input type="number" name="price" value={eventData.price || ''} onChange={handleChange} required />
       </label>
       <br />
       

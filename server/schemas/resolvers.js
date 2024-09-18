@@ -3,16 +3,19 @@ const { Users, Events } = require('../models');
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
-    user: async (_, { id }) => await Users.findById(id),
+    user: async (parent, { id }) => await Users.findById(id),
     events: async () => await Events.find(),
-    event: async (_, { id }) => await Events.findById(id),
+    event: async (parent, { id }) => await Events.findById(id),
   },
+
   Mutation: {
-    addUser: async (_, args) => {
+    addUser: async (parent, args) => {
       const newUser = new Users(args);
+      newUser.password = await bcrypt.hash(password, 10)
       return await newUser.save();
     },
-    addToCart: async (_, { userId, eventId }) => {
+
+    addToCart: async (parent, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
       if (!user.cart.includes(eventId)) {
@@ -21,14 +24,16 @@ const resolvers = {
       }
       return user;
     },
-    removeFromCart: async (_, { userId, eventId }) => {
+
+    removeFromCart: async (parent, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
       user.cart = Users.cart.filter(id => id.toString() !== eventId.toString());
       await user.save();
       return user;
     },
-    purchaseCart: async (_, { userId }) => {
+
+    purchaseCart: async (parent, { userId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
       const events = await Events.find({ _id: { $in: user.cart } });
@@ -44,20 +49,20 @@ const resolvers = {
       await user.save();
       return user;
     },
+
     addEvent: async (_, args) => {
-      const newEvent = new Events(args);
-      return await newEvent.save();
-    },
-    updateEvent: async (_, { eventId, ...updates }) => {
-      return await Events.findByIdAndUpdate(id, updates, { new: true });
-    },
-    deleteEvent: async (_, { eventId }) => {
-      await Events.findByIdAndDelete(id);
-      return true;
-    },
-
-
+    const newEvent = new Event(args);
+    return await newEvent.save();
   },
+    updateEvent: async (_, { id, ...updates }) => {
+    return await Event.findByIdAndUpdate(id, updates, { new: true });
+  },
+    deleteEvent: async (_, { id }) => {
+    await Event.findByIdAndDelete(id);
+    return true;
+  },
+},
+
   User: {
     // Update purchaseHistory resolver to include purchaseDate and event URL
     purchaseHistory: async (user) => await Events.find({ _id: { $in: user.purchaseHistory.map(p => p.eventId) } }).then(events => events.map(event => ({
@@ -67,8 +72,9 @@ const resolvers = {
     createdEventHistory: async (user) => await Events.find({ _id: { $in: user.createdEventHistory } }),
     cart: async (user) => await Events.find({ _id: { $in: user.cart } }),
   },
+
   Event: {
-    createdBy: async (event) => await Users.find({ _id: { $in: event.createdBy } }),
+    createdBy: async (parent, event) => await Users.find({ _id: { $in: Events.createdBy } }),
   }
 };
 

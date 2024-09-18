@@ -2,12 +2,6 @@ const { Schema, model } = require('mongoose');
 
 const eventsSchema = new Schema(
   {
-    id: {
-      type: Number,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     name: {
       type: String,
       required: true
