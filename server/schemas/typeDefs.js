@@ -1,16 +1,70 @@
-const { gql } = require('apollo-server-express');
+const typeDefs = `
+  type User {
+    id: ID!
+    username: String!
+    email: String!
+    password: String!
+    purchaseHistory: [Event]
+    createdEventHistory: [Event]
+    cart: [Event]
+    createdAt: String
+    updatedAt: String
+  }
 
-const typeDefs = gql`
   type Event {
     id: ID!
     name: String!
-    date: String!
+    description: String!
+    venue: String!
     location: String!
+    eventDate: String!
+    eventTime: String!
+    tags: String!
+    price: Float!
+    createdBy: [User]
+    createdAt: String
+    updatedAt: String
+
   }
 
   type Query {
     events: [Event]
-    searchEvents(keyword: String!): [Event]
+    event(id: ID!): Event
+    users: [User]
+    user(id: ID!): User
+  }
+
+  type Mutation {
+    addUser(
+      username: String!
+      email: String!
+      password: String!
+    ): User
+
+    addEvent(
+      name: String!
+      description: String!
+      venue: String!
+      location: String!
+      eventDate: String!
+      eventTime: String!
+      tags: String!
+      price: Float!
+    ): Event
+
+    addToCart(
+      userId: ID!, 
+      eventId: ID!
+    ): User
+
+    removeFromCart(
+      userId: ID!,
+      eventId: ID!
+    ): User
+
+    purchaseCart(
+      userId: ID!
+    ): User
   }
 `;
 

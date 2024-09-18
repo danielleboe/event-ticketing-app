@@ -1,0 +1,57 @@
+[
+    {
+        "name": "Summer Music Festival",
+        "description": "An exciting summer festival featuring live music from popular bands and artists. Enjoy food trucks, crafts, and activities for all ages.",
+        "venue": "Central Park",
+        "location": "Central Park, New York, NY 10024",
+        "eventDate": "06/20/2024",
+        "eventTime": "02:00 PM",
+        "tags": "music,festival,summer",
+        "price": 50.00,
+        "createdBy": []
+    },
+    {
+        "name": "Tech Innovations Conference",
+        "description": "A conference exploring the latest advancements in technology, with keynote speakers, workshops, and networking opportunities.",
+        "venue": "Tech Convention Center",
+        "location": "123 Innovation Drive, San Francisco, CA 94105",
+        "eventDate": "08/15/2024",
+        "eventTime": "09:00 AM",
+        "tags": "technology,conference,innovation",
+        "price": 150.00,
+        "createdBy": []
+    },
+    {
+        "name": "Art and Craft Fair",
+        "description": "A vibrant fair showcasing local artists and crafters. Browse unique artworks, handcrafted items, and enjoy live entertainment.",
+        "venue": "Main Street",
+        "location": "456 Main Street, Austin, TX 78701",
+        "eventDate": "07/10/2024",
+        "eventTime": "10:00 AM",
+        "tags": "art,crafts,fair",
+        "price": 20.00,
+        "createdBy": []
+    },
+    {
+        "name": "Charity Gala Dinner",
+        "description": "A formal gala dinner to raise funds for local charities. Enjoy a gourmet meal, live music, and a silent auction.",
+        "venue": "Grand Ballroom",
+        "location": "789 Grand Avenue, Miami, FL 33130",
+        "eventDate": "11/05/2024",
+        "eventTime": "07:00 PM",
+        "tags": "charity,gala,dinner",
+        "price": 200.00,
+        "createdBy": []
+    },
+    {
+        "name": "Family Fun Day",
+        "description": "A fun-filled day for the entire family with games, crafts, face painting, and performances. A great event for making memories together.",
+        "venue": "City Park",
+        "location": "101 City Park Drive, Chicago, IL 60614",
+        "eventDate": "09/12/2024",
+        "eventTime": "11:00 AM",
+        "tags": "family,fun,activities",
+        "price": 10.00,
+        "createdBy": []
+    }
+]
