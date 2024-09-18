@@ -15,34 +15,22 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    
-    loginUser: async (_, { email, password }) => {
+  
+    loginUser: async (parent, { email, password }, context) => {
       const user = await Users.findOne({ email });
+
       if (!user) {
-        throw new Error('No user found with this email address');
+        throw new AuthenticationError('No user found with this email address');
       }
 
       const correctPw = await user.isCorrectPassword(password);
+
       if (!correctPw) {
-        throw new Error('Incorrect password');
+        throw new AuthenticationError('Incorrect credentials');
       }
 
       const token = signToken(user);
-      return { token, user };
-    },
 
-    loginUser: async (_, { email, password }) => {
-      const user = await Users.findOne({ email });
-      if (!user) {
-        throw new Error('No user found with this email address');
-      }
-
-      const correctPw = await user.isCorrectPassword(password);
-      if (!correctPw) {
-        throw new Error('Incorrect password');
-      }
-
-      const token = signToken(user);
       return { token, user };
     },
 
