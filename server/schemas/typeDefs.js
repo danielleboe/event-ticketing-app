@@ -11,7 +11,7 @@ const typeDefs = `
     updatedAt: String
   }
 
-type Purchase {  
+  type Purchase {  
     eventId: ID!
     name: String!
     date: String!
@@ -32,13 +32,14 @@ type Purchase {
     createdBy: [User]
     createdAt: String
     updatedAt: String
-url: String!
+    url: String!
   }
-type AuthPayload {
-  token: String
-  user: User
-}
-  
+
+  type AuthPayload {
+    token: String
+    user: User
+  }
+
   type Query {
     events: [Event]
     event(id: ID!): Event
@@ -47,13 +48,13 @@ type AuthPayload {
   }
 
   type Mutation {
-
-       createUser(
+    createUser(
       username: String!
       email: String!
       password: String!
     ): AuthPayload
 
+    loginUser(email: String!, password: String!): AuthPayload
 
     addEvent(
       name: String!

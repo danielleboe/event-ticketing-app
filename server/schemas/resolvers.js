@@ -9,23 +9,43 @@ const resolvers = {
     event: async (_, { _id }) => await Events.findById(id).populate('createdBy'),
   },
   Mutation: {
-    // addUser: async (_, args) => {
-    //   const newUser = new Users(args);
-    //   return await newUser.save();
-    // },
+ 
     createUser: async (_, { username, email, password }) => {
-      try {
-        const user = await Users.create({ username, email, password });
-        const token = signToken(user);
-        return { token, user };
-      } catch (error) {
-        if (error.code === 11000) {
-          // Duplicate key error (E11000)
-          throw new Error('A user with that username or email already exists.');
-        }
-        throw new Error('Error creating user');
-      }
+      const user = await Users.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
     },
+    
+    loginUser: async (_, { email, password }) => {
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error('No user found with this email address');
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw) {
+        throw new Error('Incorrect password');
+      }
+
+      const token = signToken(user);
+      return { token, user };
+    },
+
+    loginUser: async (_, { email, password }) => {
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error('No user found with this email address');
+      }
+
+      const correctPw = await user.isCorrectPassword(password);
+      if (!correctPw) {
+        throw new Error('Incorrect password');
+      }
+
+      const token = signToken(user);
+      return { token, user };
+    },
+
     addToCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
