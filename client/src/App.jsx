@@ -1,39 +1,23 @@
-// import './App.css';
-// import { Outlet } from 'react-router-dom';
-// import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-
-// const client = new ApolloClient({
-//   uri: '/graphql',
-//   cache: new InMemoryCache(),
-// });
-
-// function App() {
-//   return (
-//     <ApolloProvider client={client}>
-//       <div className="flex-column justify-center align-center min-100-vh bg-primary">
-//         <Outlet />
-//       </div>
-//     </ApolloProvider>
-//   );
-// }
-
-// export default App;
-
+// client/src/App.jsx
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Search from './pages/Search';
+import UserProfile from './components/UserProfile'; // Import the UserProfile component
 
 function App() {
+  const dummyUser = {
+    id: '1', // Replace with actual user ID
+    username: 'johndoe',
+    email: 'johndoe@example.com',
+    // Add more user details as needed
+  };
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/search" element={<Search />} />
-      {/* <Route path="/event" element={<Event />} />
-      <Route path="/cart" element={<Event />} />
-      <Route path="/checkout" element={<Event />} />
-      <Route path="/confirmation" element={<Event />} /> */}
-
+      <Route path="/profile" element={<UserProfile user={dummyUser} />} /> {/* Add the route for the user profile */}
     </Routes>
   );
 }
