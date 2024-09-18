@@ -27,7 +27,7 @@ type Purchase {
     location: String!
     eventDate: String!
     eventTime: String!
-    tags: String!
+    tags: [String!]
     price: Float!
     createdBy: [User]
     createdAt: String
@@ -56,7 +56,7 @@ url: String!
       location: String!
       eventDate: String!
       eventTime: String!
-      tags: String!
+      tags: [String!]
       price: Float!
       url: String!
     ): Event
