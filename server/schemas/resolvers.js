@@ -1,5 +1,6 @@
 const { Users, Events } = require('../models');
 const { signToken } = require('../utils/auth');
+const bcrypt = require('bcrypt');
 
 const resolvers = {
   Query: {
@@ -25,6 +26,20 @@ const resolvers = {
         }
         throw new Error('Error creating user');
       }
+    },
+    loginUser: async (_, { email, password }) => {
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        throw new Error('Invalid password');
+      }
+
+      const token = signToken(user);
+      return { token, user };
     },
     addToCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);

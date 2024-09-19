@@ -4,14 +4,14 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
-    purchaseHistory: [Purchase] 
+    purchaseHistory: [Purchase]
     createdEventHistory: [Event]
     cart: [Event]
     createdAt: String
     updatedAt: String
   }
 
-type Purchase {  
+  type Purchase {
     eventId: ID!
     name: String!
     date: String!
@@ -29,16 +29,17 @@ type Purchase {
     eventTime: String!
     tags: String!
     price: Float!
-    createdBy: [User]
+    createdBy: User # Changed from [User] to User, assuming one user creates an event
     createdAt: String
     updatedAt: String
-url: String!
+    url: String!
   }
-type AuthPayload {
-  token: String
-  user: User
-}
-  
+
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Query {
     events: [Event]
     event(id: ID!): Event
@@ -53,12 +54,16 @@ type AuthPayload {
       password: String!
     ): User
 
-       createUser(
+    createUser(
       username: String!
       email: String!
       password: String!
     ): AuthPayload
 
+    loginUser(
+      email: String!
+      password: String!
+    ): AuthPayload
 
     addEvent(
       name: String!
@@ -73,12 +78,12 @@ type AuthPayload {
     ): Event
 
     addToCart(
-      userId: ID!, 
+      userId: ID!
       eventId: ID!
     ): User
 
     removeFromCart(
-      userId: ID!,
+      userId: ID!
       eventId: ID!
     ): User
 
