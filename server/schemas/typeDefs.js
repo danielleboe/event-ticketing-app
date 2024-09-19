@@ -1,6 +1,6 @@
 const typeDefs = `
   type User {
-    id: ID!
+    _id: ID!
     username: String!
     email: String!
     password: String!
@@ -11,7 +11,7 @@ const typeDefs = `
     updatedAt: String
   }
 
-  type Purchase {
+type Purchase {  
     eventId: ID!
     name: String!
     date: String!
@@ -34,12 +34,11 @@ const typeDefs = `
     updatedAt: String
     url: String!
   }
-
-  type AuthPayload {
-    token: String!
-    user: User!
-  }
-
+type AuthPayload {
+  token: String
+  user: User
+}
+  
   type Query {
     events: [Event]
     event(id: ID!): Event
@@ -54,16 +53,12 @@ const typeDefs = `
       password: String!
     ): User
 
-    createUser(
+       createUser(
       username: String!
       email: String!
       password: String!
     ): AuthPayload
 
-    loginUser(
-      email: String!
-      password: String!
-    ): AuthPayload
 
     addEvent(
       name: String!

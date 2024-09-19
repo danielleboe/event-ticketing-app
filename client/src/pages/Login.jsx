@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { LOGIN_USER, CREATE_USER } from '../utils/mutations';
+import { CREATE_USER, LOGIN_USER } from '../utils/mutations';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [loginError, setLoginError] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [loginUser, { error: loginError }] = useMutation(LOGIN_USER);
-  const [createUser, { error: registerError }] = useMutation(CREATE_USER);
+  const [registerError, setRegisterError] = useState(false);
+  const navigate = useNavigate();
+
+  const [createUser] = useMutation(CREATE_USER);
+
+  const [loginUser] = useMutation(LOGIN_USER);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,10 +23,16 @@ const Login = () => {
       const { data } = await loginUser({
         variables: { email, password },
       });
-      // Handle successful login (e.g., save token, redirect to profile)
-      console.log(data);
-    } catch (err) {
-      console.error(err);
+      console.log('Login response:', data); // Debug log
+      if (data && data.login && data.login.user) {
+        onLogin(data.login.user);
+        navigate('/');
+      } else {
+        setLoginError(true);
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+      setLoginError(true);
     }
   };
 
@@ -30,6 +42,7 @@ const Login = () => {
       const { data } = await createUser({
         variables: { username, email, password },
       });
+      // Handle successful registration (e.g., save token, redirect to profile)
       console.log(data);
     } catch (err) {
       console.error(err);

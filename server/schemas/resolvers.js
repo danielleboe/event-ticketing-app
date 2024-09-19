@@ -5,15 +5,12 @@ const bcrypt = require('bcrypt');
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
-    user: async (_, { id }) => await Users.findById(id),
+    user: async (_, { _id }) => await Users.findById(id),
     events: async () => await Events.find().populate('createdBy'),
-    event: async (_, { id }) => await Events.findById(id).populate('createdBy'),
+    event: async (_, { _id }) => await Events.findById(id).populate('createdBy'),
   },
   Mutation: {
-    addUser: async (_, args) => {
-      const newUser = new Users(args);
-      return await newUser.save();
-    },
+ 
     createUser: async (_, { username, email, password }) => {
       try {
         const user = await Users.create({ username, email, password });
@@ -27,20 +24,6 @@ const resolvers = {
         throw new Error('Error creating user');
       }
     },
-    loginUser: async (_, { email, password }) => {
-      const user = await Users.findOne({ email });
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      const validPassword = await bcrypt.compare(password, user.password);
-      if (!validPassword) {
-        throw new Error('Invalid password');
-      }
-
-      const token = signToken(user);
-      return { token, user };
-    },
     addToCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
@@ -53,7 +36,7 @@ const resolvers = {
     removeFromCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
-      user.cart = Users.cart.filter(id => id.toString() !== eventId.toString());
+      user.cart = Users.cart.filter(id => _id.toString() !== eventId.toString());
       await user.save();
       return user;
     },
