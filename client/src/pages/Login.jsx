@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { CREATE_USER, LOGIN_USER } from '../utils/mutations';
@@ -19,13 +19,17 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log(`console.log handlelogin`,LOGIN_USER );
     try {
       const { data } = await loginUser({
         variables: { email, password },
       });
       console.log('Login response:', data); // Debug log
       if (data && data.login && data.login.user) {
+        sessionStorage.setItem('authToken', data.login.token);
+        sessionStorage.setItem('userId', data.login.user._id);
         onLogin(data.login.user);
+        console.log(`login.user`, data.login.user);
         navigate('/');
       } else {
         setLoginError(true);
@@ -43,11 +47,20 @@ const Login = ({ onLogin }) => {
         variables: { username, email, password },
       });
       // Handle successful registration (e.g., save token, redirect to profile)
-      console.log(data);
+      if (data && data.createUser) {
+        // Optionally store token and user info in sessionStorage
+        sessionStorage.setItem('authToken', data.createUser.token);
+        sessionStorage.setItem('userId', data.createUser.user._id);
+        
+        onLogin(data.createUser.user); // Pass user info to parent component
+        navigate('/');
+      }
     } catch (err) {
       console.error(err);
+      setRegisterError(true); // Set registration error state
     }
   };
+
 
   return (
     <div className="login-container">
@@ -60,6 +73,7 @@ const Login = ({ onLogin }) => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            autoComplete="username"
           />
           <label htmlFor="register-email"><b>Email</b></label>
           <input
@@ -68,7 +82,8 @@ const Login = ({ onLogin }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+            autoComplete="email"
+            />
           <label htmlFor="register-password"><b>Password</b></label>
           <input
             type="password"
@@ -76,6 +91,7 @@ const Login = ({ onLogin }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="password"
           />
           <button type="submit" className="login-button">Register</button>
           {registerError && <p className="error-message">Registration failed. Please try again.</p>}
@@ -107,7 +123,7 @@ const Login = ({ onLogin }) => {
           <button type="submit" className="login-button">Log In</button>
           {loginError && <p className="error-message">Login failed. Please try again.</p>}
           <p>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button type="button" onClick={() => setIsRegistering(true)} className="toggle-button">
               Register
             </button>

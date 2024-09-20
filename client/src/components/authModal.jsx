@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER, CREATE_USER } from '../utils/mutations';
-import './authModal.css';
+import '../styles/nav.css';
 
 const AuthModal = ({ handleOpenLoginModal }) => {
   const [email, setEmail] = useState('');

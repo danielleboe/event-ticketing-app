@@ -39,12 +39,24 @@ type AuthPayload {
   user: User
 }
   
+  type Auth {
+    token: String!
+    user: User!
+  }
+
   type Query {
     events: [Event]
     event(id: ID!): Event
     users: [User]
     user(id: ID!): User
   }
+
+
+  type Query {
+    users: [User]
+    user(id: ID!): User
+  }
+
 
   type Mutation {
     addUser(
@@ -53,12 +65,16 @@ type AuthPayload {
       password: String!
     ): User
 
-       createUser(
+    createUser(
       username: String!
       email: String!
       password: String!
     ): AuthPayload
 
+    loginUser(
+      email: String!, 
+      password: String!
+      ): AuthPayload!
 
     addEvent(
       name: String!

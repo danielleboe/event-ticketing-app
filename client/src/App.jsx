@@ -10,8 +10,15 @@ function App() {
   const [user, setUser] = useState(null); // Start with null for a real scenario
   const navigate = useNavigate();
 
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   navigate('/'); // Redirect to home or a suitable page after logout
+  // };
+
   const handleLogout = () => {
     setUser(null);
+    sessionStorage.removeItem('authToken'); // Optional: clear token on logout
+    sessionStorage.removeItem('userId'); // Optional: clear userId on logout
     navigate('/'); // Redirect to home or a suitable page after logout
   };
 

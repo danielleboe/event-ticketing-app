@@ -1,11 +1,10 @@
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_PURCHASE_HISTORY } from '../utils/queries';
 import './UserProfile.css'; // Corrected the path to the CSS file
 
 const Home = ({ user }) => {
   const { loading, error, data } = useQuery(GET_USER_PURCHASE_HISTORY, {
-    variables: { id: user.id },
+    variables: { id: user._id },
   });
 
   if (loading) return <p>Loading...</p>;

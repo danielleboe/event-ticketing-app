@@ -42,3 +42,28 @@ export const GET_USER_PURCHASE_HISTORY = gql`
     }
   }
 `;
+
+
+// get all users
+export const GET_USERS = gql`
+  query GetUsers {
+    users {
+      _id
+      username
+      email
+      purchaseHistory {
+        id
+        name
+        date
+        url
+        purchaseDate
+      }
+      createdEventHistory { 
+        id
+        name
+        date
+        url
+      }
+    }
+  }
+`;

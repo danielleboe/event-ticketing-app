@@ -1,6 +1,8 @@
 const { Users, Events } = require('../models');
 const { signToken } = require('../utils/auth');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { generateToken } = require('../utils/auth'); // Ensure this function is correctly implemented
 
 const resolvers = {
   Query: {
@@ -12,18 +14,63 @@ const resolvers = {
   Mutation: {
  
     createUser: async (_, { username, email, password }) => {
-      try {
-        const user = await Users.create({ username, email, password });
-        const token = signToken(user);
-        return { token, user };
-      } catch (error) {
-        if (error.code === 11000) {
-          // Duplicate key error (E11000)
-          throw new Error('A user with that username or email already exists.');
-        }
-        throw new Error('Error creating user');
+      // Check if the user already exists
+      const existingUser = await Users.findOne({ email });
+      if (existingUser) {
+        throw new Error('User already exists with this email');
       }
+
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Create the new user
+      const newUser = await Users.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+
+      // Generate a token
+      const token = generateToken(newUser);
+
+      return {
+        token,
+        user: {
+          _id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+        },
+      };
     },
+
+
+    loginUser: async (_, { email, password }) => {
+      // Find the user by email
+      const user = await Users.findOne({ email });
+      if (!user) {
+        throw new Error('No user found with this email');
+      }
+
+      // Check if the password is correct
+      const isMatch = await bcrypt.compare(password, user.password);
+      console.log(`loginpasswordcompare`, password, user.password);
+      if (!isMatch) {
+        throw new Error('Invalid password');
+      }
+
+      // Generate a token
+      const token = generateToken(user);
+
+      return {
+        token,
+        user: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+      };
+    },
+
     addToCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
