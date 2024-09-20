@@ -34,10 +34,10 @@ type Purchase {
     updatedAt: String
     url: String!
   }
-type AuthPayload {
-  token: String
-  user: User
-}
+  type AuthPayload {
+    token: String
+    user: User
+  }
   
   type Auth {
     token: String!
@@ -74,7 +74,7 @@ type AuthPayload {
     loginUser(
       email: String!, 
       password: String!
-      ): AuthPayload!
+      ): AuthPayload
 
     addEvent(
       name: String!

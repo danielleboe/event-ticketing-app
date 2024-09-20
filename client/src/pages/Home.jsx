@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_USER_PURCHASE_HISTORY } from "../utils/queries";
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
+// s
 
 const Home = ({ user, onLogout }) => {
   const [search, setSearch] = useState("");

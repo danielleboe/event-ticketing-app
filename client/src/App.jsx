@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import Search from './pages/Search';
+import Event from './pages/Event';
 import UserProfile from './components/UserProfile';
 import Login from './pages/Login';
 
@@ -10,15 +10,10 @@ function App() {
   const [user, setUser] = useState(null); // Start with null for a real scenario
   const navigate = useNavigate();
 
-  // const handleLogout = () => {
-  //   setUser(null);
-  //   navigate('/'); // Redirect to home or a suitable page after logout
-  // };
-
   const handleLogout = () => {
     setUser(null);
-    sessionStorage.removeItem('authToken'); // Optional: clear token on logout
-    sessionStorage.removeItem('userId'); // Optional: clear userId on logout
+    sessionStorage.removeItem('authToken'); // clear token on logout
+    sessionStorage.removeItem('userId'); // clear userId on logout
     navigate('/'); // Redirect to home or a suitable page after logout
   };
 
@@ -28,7 +23,6 @@ function App() {
   };
 
   const isLoggedIn = !!user;
-
   useEffect(() => {
     console.log(isLoggedIn ? 'Logged In' : 'Logged Out');
   }, [isLoggedIn]);
@@ -36,7 +30,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
-      <Route path="/search" element={<Search />} />
+      <Route path="/event" element={<Event />} />
       <Route 
         path="/profile" 
         element={user ? <UserProfile user={user} /> : <Navigate to="/login" />}
