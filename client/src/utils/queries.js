@@ -1,9 +1,10 @@
 import { gql } from "@apollo/client";
 
-//get all events
+// get all events
 export const GET_EVENTS = gql`
   query GetEvents {
     events {
+      id
       name
       description
       venue
@@ -16,7 +17,7 @@ export const GET_EVENTS = gql`
   }
 `;
 
-//get a single event
+// get a single event
 export const GET_EVENT = gql`
   query GetEvent($id: ID!) {
     event(id: $id) {
@@ -29,6 +30,7 @@ export const GET_EVENT = gql`
       eventTime
       tags
       price
+      url
     }
   }
 `;
@@ -77,7 +79,8 @@ export const ADD_EVENT = gql`
     $eventDate: String!
     $eventTime: String!
     $tags: [String]
-    $price: Number!
+    $price: Float!
+    $url: String
   ) {
     addEvent(
       name: $name
@@ -88,6 +91,7 @@ export const ADD_EVENT = gql`
       eventTime: $eventTime
       tags: $tags
       price: $price
+      url: $url
     ) {
       id
       name
@@ -98,7 +102,7 @@ export const ADD_EVENT = gql`
       eventTime
       tags
       price
-      createdby
+      createdBy
     }
   }
 `;
@@ -114,7 +118,7 @@ export const UPDATE_EVENT = gql`
     $eventDate: String
     $eventTime: String
     $tags: [String]
-    $price: Number
+    $price: Float
   ) {
     updateEvent(
       id: $id
@@ -136,7 +140,7 @@ export const UPDATE_EVENT = gql`
       eventTime
       tags
       price
-      createdby
+      createdBy
     }
   }
 `;

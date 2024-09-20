@@ -19,7 +19,7 @@ type Purchase {
     purchaseDate: String!
   }
 
-  type Event {
+ type Event {
     id: ID!
     name: String!
     description: String!
@@ -32,7 +32,7 @@ type Purchase {
     createdBy: [User]
     createdAt: String
     updatedAt: String
-url: String!
+    url: String
   }
 
   type Query {
@@ -58,7 +58,7 @@ url: String!
       eventTime: String!
       tags: [String!]
       price: Float!
-      url: String!
+      url: String
     ): Event
 
     updateEvent(
@@ -69,7 +69,7 @@ url: String!
       location: String
       eventDate: String
       eventTime: String
-      tags: [String!]
+      tags: [String]
       price: Float
       url: String
     ): Event

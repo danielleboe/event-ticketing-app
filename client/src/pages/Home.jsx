@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { GET_EVENTS } from "../utils/queries"; // Import the query for fetching events
 import "../styles/Home.css";
+import EventForm from './EventForm'; // Import the EventForm component
 
 const Home = () => {
   const { loading, error, data } = useQuery(GET_EVENTS);
@@ -41,6 +42,11 @@ const Home = () => {
 
   return (
     <div>
+      <h1>Welcome to the Event Ticketing App</h1>
+
+      {/* Render the EventForm component above the search bar */}
+      <EventForm />
+
       {/* Search Bar */}
       <div>
         <form onSubmit={handleSearch} className="search-container">
@@ -92,7 +98,6 @@ const Home = () => {
         <h1>Upcoming Events</h1>
       </div>
       <div className="event-container">
-        console.log(`!!!!!!!!!!!!!!id`);
         {filteredEvents.map((event) => (
           <div key={event.id} className="event-card">
             <a href={`/events/${event.id}`} className="event-link">
@@ -104,6 +109,13 @@ const Home = () => {
               <p>${event.price.toFixed(2)}</p>
               <p>Tags: {event.tags.join(', ')}</p>
             </a>
+            {/* Add Edit Button */}
+            <button
+              className="button"
+              onClick={() => navigate(`/events/edit/${event.id}`)}
+            >
+              Edit
+            </button>
           </div>
         ))}
       </div>
@@ -112,4 +124,3 @@ const Home = () => {
 };
 
 export default Home;
-

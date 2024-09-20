@@ -51,16 +51,30 @@ const resolvers = {
     },
 
     addEvent: async (_, args) => {
-    const newEvent = new Event(args);
-    return await newEvent.save();
-  },
-    updateEvent: async (_, { id, ...updates }) => {
-    return await Event.findByIdAndUpdate(id, updates, { new: true });
-  },
-    deleteEvent: async (_, { id }) => {
-    await Event.findByIdAndDelete(id);
-    return true;
-  },
+      console.log('Received args:', args);
+      try {
+        const event = new Events(args);
+        await event.save();
+        return event;
+      } catch (err) {
+        console.error('Error adding event:', err);
+        throw new Error('Failed to add event');
+      }
+    },
+    updateEvent: async (parent, args) => {
+      console.log('Received args:', args); // Log the received arguments
+      try {
+        const updatedEvent = await Events.findByIdAndUpdate(
+          args.id,
+          { $set: args },
+          { new: true, runValidators: true }
+        );
+        console.log('Updated event:', updatedEvent); // Log the updated event
+        return updatedEvent;
+      } catch (err) {
+        throw new Error('Error updating event: ' + err.message);
+      }
+    },
 },
 
   User: {
@@ -74,7 +88,7 @@ const resolvers = {
   },
 
   Event: {
-    createdBy: async (parent, event) => await Users.find({ _id: { $in: Events.createdBy } }),
+    createdBy: async (parent) => await Users.findById(parent.createdBy),  // Use 'parent.createdBy'
   }
 };
 

@@ -1,222 +1,100 @@
-import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { useNavigate, useParams } from "react-router-dom"; // Import the useNavigate hook
-import "../styles/EventCreate.css";
-import {
-  ADD_EVENT,
-  UPDATE_EVENT,
-  DELETE_EVENT,
-} from "../utils/mutations";
-import {
-  GET_EVENT
-} from "../utils/queries";
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_EVENT } from '../utils/queries';
+import { UPDATE_EVENT } from '../utils/mutations';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const EventForm = ({ onEventDeleted }) => {
-  const { eventId } = useParams(); // Extract eventId from URL
-  const [eventData, setEventData] = useState({
-    id: 0,
-    name: "",
-    description: "",
-    venue: "",
-    location: "",
-    eventDate: "",
-    eventTime: "",
-    tags: [],
-    price: 0,
-  });
-  console.log(eventId);
-  const navigate = useNavigate(); // Initialize the navigate function
-
-  const [addEvent] = useMutation(ADD_EVENT);
+const EventForm = ({ eventId }) => {
+  const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_EVENT, { variables: { id: eventId || id } });
   const [updateEvent] = useMutation(UPDATE_EVENT);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
+  const navigate = useNavigate(); // Get the navigate function
 
-  const { data } = useQuery(GET_EVENT, {
-    variables: { id: eventId },
-    skip: !eventId,
+  const [formState, setFormState] = useState({
+    name: '',
+    description: '',
+    venue: '',
+    location: '',
+    eventDate: '',
+    eventTime: '',
+    tags: '',
+    price: '',
+    url: ''
   });
 
-  useEffect(() => {
-    if (data) {
-      setEventData(data.getEvent);
-    }
-  }, [data]);
-  console.log(`data!!!!!!!`, data.id);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading event details.</p>;
+
+  const event = data?.event;
+
+  if (!event) {
+    return <p>No event found.</p>;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEventData((prev) => ({ ...prev, [name]: value }));
+    setFormState({
+      ...formState,
+      [name]: value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`eventid`, eventId);
-    console.log(`eventdata`, eventData);
     try {
-      if (eventId) {
-        // Update existing event
-        await updateEvent({ variables: { id: eventId, ...eventData } });
-      } else {
-        // Create a new event
-        const { data } = await addEvent({ variables: eventData });
-        // eslint-disable-next-line no-const-assign
-        eventId = data?.addEventEvent?.id; // Make sure this matches your server's response field
-      }
-
-      // Navigate only if eventId is valid
-      if (eventId) {
-        navigate(`/events/${eventId}`);
-      } else {
-        console.error("Failed to get event ID");
-      }
-    } catch (error) {
-      console.error("Error saving event:", error);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (eventId) {
-      await deleteEvent({ variables: { id: eventId } });
-      if (onEventDeleted) onEventDeleted();
-      // Redirect to a list of events or another relevant page after deleting
-      navigate("/events");
+      await updateEvent({
+        variables: {
+          id: eventId || id,
+          name: formState.name || event.name,
+          description: formState.description || event.description,
+          venue: formState.venue || event.venue,
+          location: formState.location || event.location,
+          eventDate: formState.eventDate || event.eventDate,
+          eventTime: formState.eventTime || event.eventTime,
+          tags: formState.tags ? formState.tags.split(',').map(tag => tag.trim()) : event.tags,
+          price: parseFloat(formState.price) || event.price,
+          url: formState.url || event.url
+        }
+      });
+      alert('Event updated successfully!');
+      navigate('/'); // Redirect to Home page
+    } catch (err) {
+      console.error(err);
+      alert('Error updating event.');
     }
   };
 
   return (
-    <section className="event-form-container">
-      <h1 className="heading">Create New Event</h1>
-      <form id="eventForm" onSubmit={handleSubmit}>
-        <div className="input">
-          <input
-            className="input-field"
-            id="nameInput"
-            name="name"
-            placeholder="  Event Name"
-            value={eventData.name || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Event Name:</label>
-        </div>
-        <br />
-        <div className="input">
-          <textarea
-            className="input-field"
-            id="descriptionInput"
-            name="description"
-            placeholder="  Description"
-            value={eventData.description || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Description:</label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="venueInput"
-            name="venue"
-            placeholder="  Venue"
-            value={eventData.venue || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Venue:</label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="locationInput"
-            name="location"
-            placeholder="  Address"
-            value={eventData.location || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Address:</label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="dateInput"
-            type="date"
-            name="eventDate"
-            placeholder="  Event Date"
-            value={eventData.eventDate || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Event Date:</label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="timeInput"
-            type="time"
-            name="eventTime"
-            placeholder="  Event Time"
-            value={eventData.eventTime || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Event Time:</label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="tagInput"
-            name="tags"
-            placeholder="  Tags"
-            value={eventData.tags.join(", ") || ""}
-            onChange={(e) =>
-              setEventData((prev) => ({
-                ...prev,
-                tags: e.target.value.split(",").map((tag) => tag.trim()),
-              }))
-            }
-          />
-          <label className="input-label">Tags (comma separated): </label>
-        </div>
-        <br />
-        <div className="input">
-          <input
-            className="input-field"
-            id="priceInput"
-            type="number"
-            name="price"
-            placeholder="  Price"
-            value={eventData.price || ""}
-            onChange={handleChange}
-            required
-          />
-          <label className="input-label">Price:</label>
-        </div>
-        <br />
-        <br />
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="name">Name</label>
+      <input type="text" id="name" name="name" defaultValue={event.name} onChange={handleChange} />
 
-        <button className="button" id="saveButton" type="submit">
-          Save Event
-        </button>
+      <label htmlFor="description">Description</label>
+      <textarea id="description" name="description" defaultValue={event.description} onChange={handleChange} />
 
-        {eventId && (
-          <button
-            className="button"
-            id="deleteButton"
-            type="button"
-            onClick={handleDelete}
-            style={{ marginLeft: "10px", color: "red" }}
-          >
-            Delete Event
-          </button>
-        )}
-      </form>
-    </section>
+      <label htmlFor="venue">Venue</label>
+      <input type="text" id="venue" name="venue" defaultValue={event.venue} onChange={handleChange} />
+
+      <label htmlFor="location">Location</label>
+      <input type="text" id="location" name="location" defaultValue={event.location} onChange={handleChange} />
+
+      <label htmlFor="eventDate">Event Date</label>
+      <input type="date" id="eventDate" name="eventDate" defaultValue={event.eventDate} onChange={handleChange} />
+
+      <label htmlFor="eventTime">Event Time</label>
+      <input type="time" id="eventTime" name="eventTime" defaultValue={event.eventTime} onChange={handleChange} />
+
+      <label htmlFor="tags">Tags</label>
+      <input type="text" id="tags" name="tags" defaultValue={event.tags.join(', ')} onChange={handleChange} />
+
+      <label htmlFor="price">Price</label>
+      <input type="number" id="price" name="price" defaultValue={event.price} onChange={handleChange} />
+
+      <label htmlFor="url">URL</label>
+      <input type="url" id="url" name="url" defaultValue={event.url} onChange={handleChange} />
+
+      <button type="submit">Save</button>
+    </form>
   );
 };
 

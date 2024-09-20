@@ -1,3 +1,4 @@
+// Mutation to create a new event
 import { gql } from '@apollo/client';
 
 // Mutation to create a new event
@@ -9,8 +10,9 @@ export const ADD_EVENT = gql`
     $location: String!
     $eventDate: String!
     $eventTime: String!
-    $tags: [String]
-    $price: Number!
+    $tags: [String!]
+    $price: Float!
+    $url: String
   ) {
     addEvent(
       name: $name
@@ -21,6 +23,7 @@ export const ADD_EVENT = gql`
       eventTime: $eventTime
       tags: $tags
       price: $price
+      url: $url
     ) {
       id
       name
@@ -31,7 +34,7 @@ export const ADD_EVENT = gql`
       eventTime
       tags
       price
-      createdby
+      
     }
   }
 `;
@@ -47,7 +50,8 @@ export const UPDATE_EVENT = gql`
     $eventDate: String
     $eventTime: String
     $tags: [String]
-    $price: Number
+    $price: Float
+    $url: String
   ) {
     updateEvent(
       id: $id
@@ -59,6 +63,7 @@ export const UPDATE_EVENT = gql`
       eventTime: $eventTime
       tags: $tags
       price: $price
+      url: $url
     ) {
       id
       name
@@ -69,7 +74,7 @@ export const UPDATE_EVENT = gql`
       eventTime
       tags
       price
-      createdby
+      url
     }
   }
 `;

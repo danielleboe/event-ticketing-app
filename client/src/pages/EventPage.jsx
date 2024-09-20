@@ -9,7 +9,7 @@ const EventPage = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading event details.</p>;
 
-  const event = data.getEvent;
+  const event = data.event;
 
   return (
     <div>

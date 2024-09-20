@@ -39,7 +39,11 @@ const eventsSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'Users'
       }
-    ]
+    ],
+    url: {
+      type: String,
+      required: false
+    }
   },
   {
     timestamps: true, 
