@@ -2,7 +2,6 @@ const { Users, Events } = require('../models');
 const { signToken } = require('../utils/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateToken } = require('../utils/auth'); // Ensure this function is correctly implemented
 
 const resolvers = {
   Query: {
@@ -31,7 +30,7 @@ const resolvers = {
       });
 
       // Generate a token
-      const token = generateToken(newUser);
+      const token = signToken(newUser);
 
       return {
         token,
@@ -59,7 +58,7 @@ const resolvers = {
       }
 
       // Generate a token
-      const token = generateToken(user);
+      const token = signToken(user);
 
       return {
         token,
@@ -83,7 +82,7 @@ const resolvers = {
     removeFromCart: async (_, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error('User not found');
-      user.cart = Users.cart.filter(id => _id.toString() !== eventId.toString());
+      user.cart = user.cart.filter(id => _id.toString() !== eventId.toString());
       await user.save();
       return user;
     },
@@ -104,7 +103,7 @@ const resolvers = {
       return user;
     },
     addEvent: async (_, args) => {
-      const newEvent = new Event(args);
+      const newEvent = new Events(args);
       return await newEvent.save();
     },
   },
