@@ -1,5 +1,5 @@
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');  // Add this line
+const { Schema } = mongoose;  // You can still destructure Schema from mongoose
 
 const usersSchema = new Schema(
   {
@@ -36,10 +36,16 @@ const usersSchema = new Schema(
     ],
     cart: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'Events'
-      }
-    ],
+        eventId: {
+          type: Schema.Types.ObjectId,
+          ref: 'Event',  // Assuming you have an Event model
+        },
+        quantity: {
+          type: Number,
+          default: 1,   // Default quantity is 1
+        },
+      },
+    ]
   },
   {
     timestamps: true,
@@ -61,6 +67,6 @@ const usersSchema = new Schema(
 //   return bcrypt.compare(password, this.password);
 // };
 
-const Users = model('users', usersSchema);
+const Users = mongoose.model('Users', usersSchema);
 
 module.exports = Users;

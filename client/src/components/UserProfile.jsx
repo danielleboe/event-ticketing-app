@@ -1,3 +1,4 @@
+// client/src/components/UserProfile.jsx
 import { useQuery } from '@apollo/client';
 import { GET_USER_PURCHASE_HISTORY } from '../utils/queries';
 import './UserProfile.css'; // Corrected the path to the CSS file

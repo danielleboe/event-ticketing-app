@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_EVENT } from '../utils/queries';
 import { ADD_TO_CART } from '../utils/mutations';
+import { useParams } from 'react-router-dom';  // Import useParams
 import "../styles/Event.css";
 
-const EventPage = ({ eventId }) => {
+const EventPage = () => {
+  const { id: eventId } = useParams();  // Extract eventId from URL params
   const { loading, error, data } = useQuery(GET_EVENT, {
     variables: { id: eventId },
   });
@@ -27,19 +29,18 @@ const EventPage = ({ eventId }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading event</p>;
 
-  const { name, description, venue, address, date, time, tags, price } = data.event;
+  const { name, description, venue, location, eventDate, eventTime, tags, price } = data.event;
 
   return (
     <div>
       <h1>{name}</h1>
       <p>{description}</p>
       <p><strong>Venue:</strong> {venue}</p>
-      <p><strong>Address:</strong> {address}</p>
-      <p><strong>Date:</strong> {date}</p>
-      <p><strong>Time:</strong> {time}</p>
+      <p><strong>Address:</strong> {location}</p>
+      <p><strong>Date:</strong> {eventDate}</p>
+      <p><strong>Time:</strong> {eventTime}</p>
       <p><strong>Tags:</strong> {tags.join(', ')}</p>
       <p><strong>Price:</strong> ${price}</p>
-
       <div>
         <label>
           Ticket Quantity:

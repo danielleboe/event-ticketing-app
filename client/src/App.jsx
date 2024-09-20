@@ -2,11 +2,21 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import Event from './pages/Event';
-import UserProfile from './components/UserProfile';
+import UserProfile from './components/UserProfile'; // Import the UserProfile component
 import Login from './pages/Login';
+import EditEventForm from './pages/EditEventForm';
+import EventPage from './pages/EventPage';
+import EventForm from './pages/EventForm';
+
 
 function App() {
+  const dummyUser = {
+    id: '1', // Replace with actual user ID
+    username: 'johndoe',
+    email: 'johndoe@example.com',
+    // Add more user details as needed
+  };
+
   const [user, setUser] = useState(null); // Start with null for a real scenario
   const navigate = useNavigate();
 
@@ -30,14 +40,20 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
-      <Route path="/event" element={<Event />} />
       <Route 
         path="/profile" 
         element={user ? <UserProfile user={user} /> : <Navigate to="/login" />}
       />
       <Route path="/login" element={<Login onLogin={handleLogin} />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/profile" element={<UserProfile user={dummyUser} />} /> {/* Add the route for the user profile */}
+      <Route path="/events/:id" element={<EventPage/>} />
+      <Route path="/events/new" element={<EventForm />} />
+      <Route path="/events/edit/:id" element={<EditEventForm />} />
     </Routes>
   );
 }
+
+
 
 export default App;

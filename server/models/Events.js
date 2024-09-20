@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');  // Add this line
+const { Schema } = mongoose;  // You can still destructure Schema from mongoose
 
 const eventsSchema = new Schema(
   {
@@ -27,25 +28,30 @@ const eventsSchema = new Schema(
       required: true
     },
     tags: {
-      type: String,
+      type: [String],
       required: true
     },
     price: {
       type: Number,
       required: true
     },
+    url: {
+      type: String,
+      required: false
+    },
     createdBy: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Users'
       }
-    ]
+    ],
+
   },
   {
     timestamps: true, 
   }
 );
 
-const Events = model('events', eventsSchema);
+const Events = mongoose.model('Events', eventsSchema);
 
 module.exports = Events;

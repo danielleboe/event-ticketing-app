@@ -1,5 +1,17 @@
 const typeDefs = `
-  type User {
+  type Users {
+    _id: ID!
+    username: String!
+    email: String!
+    password: String!
+    purchaseHistory: [Purchase]
+    createdEventHistory: [Event]
+    cart: [Event]
+    createdAt: String
+    updatedAt: String
+  }
+
+type User {
     _id: ID!
     username: String!
     email: String!
@@ -15,11 +27,11 @@ type Purchase {
     eventId: ID!
     name: String!
     date: String!
-    url: String!
+    url: String
     purchaseDate: String!
   }
 
-  type Event {
+ type Event {
     id: ID!
     name: String!
     description: String!
@@ -27,12 +39,12 @@ type Purchase {
     location: String!
     eventDate: String!
     eventTime: String!
-    tags: String!
+    tags: [String!]
     price: Float!
     createdBy: User # Changed from [User] to User, assuming one user creates an event
     createdAt: String
     updatedAt: String
-    url: String!
+    url: String
   }
   type AuthPayload {
     token: String
@@ -83,9 +95,26 @@ type Purchase {
       location: String!
       eventDate: String!
       eventTime: String!
-      tags: String!
+      tags: [String!]
       price: Float!
-      url: String!
+      url: String
+    ): Event
+
+    updateEvent(
+      id: ID!
+      name: String
+      description: String
+      venue: String
+      location: String
+      eventDate: String
+      eventTime: String
+      tags: [String]
+      price: Float
+      url: String
+    ): Event
+
+    deleteEvent(
+      id: ID!
     ): Event
 
     addToCart(

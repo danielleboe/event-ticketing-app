@@ -1,69 +1,57 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_USER_PURCHASE_HISTORY } from "../utils/queries";
+import { GET_USER_PURCHASE_HISTORY, GET_EVENTS } from "../utils/queries"; // Import the necessary queries
+import { useNavigate } from 'react-router-dom';
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
-// s
+
 
 const Home = ({ user, onLogout }) => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
-  const { loading, error, data } = useQuery(GET_USER_PURCHASE_HISTORY, {
+  // Fetch user purchase history if user is logged in
+  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER_PURCHASE_HISTORY, {
     variables: { id: user?.id },
     skip: !user,
   });
 
-  const dummyEvents = [
-    {
-      id: "1",
-      name: "Live at the Gallivan!",
-      description:
-        "Get ready for an Excellence concert series at the Gallivan - live music, swing dancing, and unforgettable memories await!",
-      venue: "Gallivan",
-      location: "301 S Temple, Salt Lake City, UT 84101",
-      date: "2024-09-30",
-      price: 49.99,
-      tags: ["dance", "concert", "music"],
-    },
-    {
-      id: "2",
-      name: "Madonna",
-      description:
-        "Experience the Queen of Pop live at Union Hall, with an evening of her greatest hits!",
-      venue: "Union Hall",
-      location: "301 S Temple, Salt Lake City, UT 84101",
-      date: "2024-10-05",
-      price: 59.99,
-      tags: ["concert", "pop", "music"],
-    },  ];
+  // Fetch events
+  const { loading: eventsLoading, error: eventsError, data: eventsData } = useQuery(GET_EVENTS);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // Handle loading and error states
+  if (userLoading || eventsLoading) return <p>Loading...</p>;
+  if (userError || eventsError) return <p>Error: {userError?.message || eventsError?.message}</p>;
 
-  const purchaseHistory = data?.user?.purchaseHistory || [];
-  const createdEventHistory = data?.user?.createdEventHistory || [];
-  
+  // Retrieve purchase history and created event history from the user data
+  const purchaseHistory = userData?.user?.purchaseHistory || [];
+  const createdEventHistory = userData?.user?.createdEventHistory || [];
+
+  // Filter upcoming and past events from the user's purchase history
   const currentDate = new Date();
   const upcomingEvents = purchaseHistory.filter(event => new Date(event.date) > currentDate);
   const pastEvents = purchaseHistory.filter(event => new Date(event.date) <= currentDate);
 
-  const filteredEvents = dummyEvents.filter(event => {
-    const matchesSearch = event.name.toLowerCase().includes(search.toLowerCase()) ||
+  // Filter events based on search, price, and date
+  const filteredEvents = eventsData.events.filter((event) => {
+    const matchesSearch =
+      event.name.toLowerCase().includes(search.toLowerCase()) ||
       event.location.toLowerCase().includes(search.toLowerCase()) ||
       event.venue.toLowerCase().includes(search.toLowerCase()) ||
       event.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
 
-    const matchesDate = selectedDate ? event.date === selectedDate : true;
+    const matchesDate = selectedDate ? event.eventDate === selectedDate : true;
     const price = event.price;
-    const matchesMinPrice = minPrice ? price >= minPrice : true;
-    const matchesMaxPrice = maxPrice ? price <= maxPrice : true;
+    const matchesMinPrice = minPrice ? price >= parseFloat(minPrice) : true;
+    const matchesMaxPrice = maxPrice ? price <= parseFloat(maxPrice) : true;
 
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
 
+  // Render events
   const renderEvents = (events) => (
     <div className="event-container">
       {events.map((event) => (
@@ -82,28 +70,38 @@ const Home = ({ user, onLogout }) => {
     </div>
   );
 
+  // Handle search submission
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?keyword=${search}`);
+  };
+
   return (
     <div className="home">
-    <div className="auth-buttons">
-      {user ? (
-        <button className="logout-button" onClick={onLogout}>Logout</button>
-      ) : (
-        <Link to="/login">
-          <button className="login-button">Login</button>
-        </Link>
-      )}
-    </div>
+      <div className="auth-buttons">
+        {user ? (
+          <button className="logout-button" onClick={onLogout}>Logout</button>
+        ) : (
+          <Link to="/login">
+            <button className="login-button">Login</button>
+          </Link>
+        )}
+      </div>
 
-      <form onSubmit={(e) => e.preventDefault()} className="search-container">
-        <input
-          type="text"
-          id="search-bar"
-          placeholder="Search events..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </form>
+  {/* Search Bar */}
+  <div>
+        <form onSubmit={handleSearch} className="search-container">
+          <input
+            type="text"
+            id="search-bar"
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </form>
+      </div>
 
+      {/* Filter Controls */}
       <div className="filters-container">
         <label>
           Min Price:
@@ -135,6 +133,27 @@ const Home = ({ user, onLogout }) => {
           />
         </label>
       </div>
+
+      {/* List of Events */}
+      <div className="eventList-headline">
+        <h1>Upcoming Events</h1>
+      </div>
+      <div className="event-container">
+        {filteredEvents.map((event) => (
+          <div key={event.id} className="event-card">
+            <a href={`/events/${event.id}`} className="event-link">
+              <h2>{event.name}</h2>
+              <p>{event.description}</p>
+              <p>{event.eventDate} {event.eventTime}</p>
+              <p>{event.venue}</p>
+              <p>{event.location}</p>
+              <p>${event.price.toFixed(2)}</p>
+              <p>Tags: {event.tags.join(', ')}</p>
+            </a>
+          </div>
+        ))}
+      </div>
+
 
       {user ? (
         <>

@@ -1,7 +1,7 @@
 const { Users, Events } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
 const resolvers = {
   Query: {
@@ -9,9 +9,20 @@ const resolvers = {
     user: async (_, { _id }) => await Users.findById(_id),
 
     events: async () => await Events.find().populate("createdBy"),
-    event: async (_, { _id }) =>
-      await Events.findById(_id).populate("createdBy"),
+    event: async (_, { id }) => {
+      try {
+        const event = await Events.findById(id).populate("createdBy");
+        if (!event) {
+          throw new Error("Event not found");
+        }
+        return event;
+      } catch (error) {
+        console.error("Error fetching event:", error);
+        throw new Error("Could not fetch event");
+      }
+    },
   },
+
   Mutation: {
     createUser: async (_, { username, email, password }) => {
       // Check if the user already exists
@@ -81,7 +92,8 @@ const resolvers = {
       }
       return user;
     },
-    removeFromCart: async (_, { userId, eventId }) => {
+
+    removeFromCart: async (parent, { userId, eventId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error("User not found");
       user.cart = user.cart.filter(
@@ -90,7 +102,8 @@ const resolvers = {
       await user.save();
       return user;
     },
-    purchaseCart: async (_, { userId }) => {
+
+    purchaseCart: async (parent, { userId }) => {
       const user = await Users.findById(userId);
       if (!user) throw new Error("User not found");
       const events = await Events.find({ _id: { $in: user.cart } });
@@ -106,11 +119,34 @@ const resolvers = {
       await user.save();
       return user;
     },
+
     addEvent: async (_, args) => {
-      const newEvent = new Events(args);
-      return await newEvent.save();
+      console.log('Received args:', args);
+      try {
+        const event = new Events(args);
+        await event.save();
+        return event;
+      } catch (err) {
+        console.error('Error adding event:', err);
+        throw new Error('Failed to add event');
+      }
     },
-  },
+    updateEvent: async (parent, args) => {
+      console.log('Received args:', args); // Log the received arguments
+      try {
+        const updatedEvent = await Events.findByIdAndUpdate(
+          args.id,
+          { $set: args },
+          { new: true, runValidators: true }
+        );
+        console.log('Updated event:', updatedEvent); // Log the updated event
+        return updatedEvent;
+      } catch (err) {
+        throw new Error('Error updating event: ' + err.message);
+      }
+    },
+},
+
   User: {
     // Update purchaseHistory resolver to include purchaseDate and event URL
     purchaseHistory: async (user) =>
@@ -128,10 +164,10 @@ const resolvers = {
       await Events.find({ _id: { $in: user.createdEventHistory } }),
     cart: async (user) => await Events.find({ _id: { $in: user.cart } }),
   },
+
   Event: {
-    createdBy: async (event) =>
-      await Users.find({ _id: { $in: event.createdBy } }),
-  },
+    createdBy: async (parent) => await Users.findById(parent.createdBy),  // Use 'parent.createdBy'
+  }
 };
 
 module.exports = resolvers;
