@@ -142,7 +142,7 @@ const Home = ({ user, onLogout }) => {
         {filteredEvents.map((event) => (
           <div key={event.id} className="event-card">
             <a href={`/events/${event.id}`} className="event-link">
-              <h2>{event.name}</h2>
+              <h2 className="eventHeadline">{event.name}</h2>
               <p>{event.description}</p>
               <p>{event.eventDate} {event.eventTime}</p>
               <p>{event.venue}</p>
@@ -155,7 +155,7 @@ const Home = ({ user, onLogout }) => {
       </div>
 
 
-      {user ? (
+      {/* {user ? (
         <>
           <h1>Welcome, {user.username}</h1>
           <p>Email: {user.email}</p>
@@ -174,7 +174,7 @@ const Home = ({ user, onLogout }) => {
           <h1>Upcoming Events</h1>
           {renderEvents(filteredEvents)}
         </>
-      )}
+      )} */}
     </div>
   );
 };

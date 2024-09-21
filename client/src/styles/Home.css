@@ -41,7 +41,12 @@ body {
 
 .eventList-headline {
   text-align: center;
-  margin: 20px 0;
+  margin: 20px 0 30px 0;
+}
+
+.eventHeadline{
+  margin: 20px 30px;
+  line-height:1.2;
 }
 
 .event-card {
