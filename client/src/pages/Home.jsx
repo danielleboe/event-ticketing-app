@@ -59,8 +59,8 @@ const Home = () => {
     <div>
       <h1>Welcome to the Event Ticketing App</h1>
 
-      {/* Render the EventForm component above the search bar */}
-      <EventForm />
+      {/* Render the EventForm component above the search bar
+      <EventForm /> */}
 
       {/* Search Bar */}
       <div>
