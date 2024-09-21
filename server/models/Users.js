@@ -52,21 +52,6 @@ const usersSchema = new Schema(
   }
 );
 
-// usersSchema.pre('save', async function (next) {
-//   if (this.isNew || this.isModified('password')) {
-//     const saltRounds = 10;
-//     console.log('Hashing password before saving');  // Debugging log
-//     this.password = await bcrypt.hash(this.password, saltRounds);
-//   }
-//   next();
-// });
-
-// usersSchema.methods.isCorrectPassword = async function (password) {
-//   console.log(`Password entered: ${password}`);  // Plain text entered
-// console.log(`Hashed password in DB: ${user.password}`);  // Hashed password in DB
-//   return bcrypt.compare(password, this.password);
-// };
-
 const Users = mongoose.model('Users', usersSchema);
 
 module.exports = Users;
