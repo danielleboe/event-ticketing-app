@@ -14,24 +14,21 @@ body {
   text-align: center;
 }
 
+/* adjusted for login */
 .search-container {
-  /* width: 100%; */
   display: flex;
   flex-direction: column;
   padding: 10px;
-  margin: 30px 20px 0px 20px;
-  justify-content:center;
+  margin: 10px 20px 0px 20px; /* Adjusted margin to reduce space above */
+  justify-content: center;
 }
 #search-bar {
   width: 80%;
   padding: 10px;
   font-size: 20px;
   border: 3px solid #27233a;
-  border-radius: 4px;
-  margin: 20px auto;
-  /* justify-content: center; */
   border-radius: 12px;
-  /* justify-content:center; */
+  margin: 20px auto; /* Adjusted margin for spacing */
 }
 
 /* Home.css */
@@ -44,13 +41,18 @@ body {
 
 .eventList-headline {
   text-align: center;
-  margin: 20px 0;
+  margin: 20px 0 30px 0;
 }
+
+/* .eventHeadline{
+  margin: 20px 30px;
+  line-height:1.2;
+} */
 
 .event-card {
   border: 1px solid #ddd;
   padding: 20px;
-  margin: 20px;
+  margin: 30px;
   border-radius: 8px;
   background-color: var(--background-color);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -114,4 +116,24 @@ margin:auto;
   border: 1px solid #27233a;
 
 }
+}
+/* adjusted for spacing */
+.login-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto; /* Reduced margin */
+}
+
+.login-button {
+  padding: 10px 20px;
+  background-color: var(--purple-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-button:hover {
+  background-color: var(--lightPurple-color);
 }

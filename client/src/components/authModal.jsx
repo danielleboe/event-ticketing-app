@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../styles/navigation.css'; // Importing styles specific to the Navigation component
 
 const LoginModal = () => {

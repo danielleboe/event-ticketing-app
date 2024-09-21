@@ -1,10 +1,22 @@
 const typeDefs = `
-  type User {
-    id: ID!
+  type Users {
+    _id: ID!
     username: String!
     email: String!
     password: String!
-    purchaseHistory: [Purchase] 
+    purchaseHistory: [Purchase]
+    createdEventHistory: [Event]
+    cart: [Event]
+    createdAt: String
+    updatedAt: String
+  }
+
+type User {
+    _id: ID!
+    username: String!
+    email: String!
+    password: String!
+    purchaseHistory: [Purchase]
     createdEventHistory: [Event]
     cart: [Event]
     createdAt: String
@@ -15,11 +27,11 @@ type Purchase {
     eventId: ID!
     name: String!
     date: String!
-    url: String!
+    url: String
     purchaseDate: String!
   }
 
-  type Event {
+ type Event {
     id: ID!
     name: String!
     description: String!
@@ -29,10 +41,19 @@ type Purchase {
     eventTime: String!
     tags: [String!]
     price: Float!
-    createdBy: [User]
+    createdBy: User # Changed from [User] to User, assuming one user creates an event
     createdAt: String
     updatedAt: String
-url: String!
+    url: String
+  }
+  type AuthPayload {
+    token: String
+    user: User
+  }
+  
+  type Auth {
+    token: String!
+    user: User!
   }
 
   type Query {
@@ -42,12 +63,30 @@ url: String!
     user(id: ID!): User
   }
 
+
+  type Query {
+    users: [User]
+    user(id: ID!): User
+  }
+
+
   type Mutation {
     addUser(
       username: String!
       email: String!
       password: String!
     ): User
+
+    createUser(
+      username: String!
+      email: String!
+      password: String!
+    ): AuthPayload
+
+    loginUser(
+      email: String!, 
+      password: String!
+      ): AuthPayload
 
     addEvent(
       name: String!
@@ -58,16 +97,33 @@ url: String!
       eventTime: String!
       tags: [String!]
       price: Float!
-      url: String!
+      url: String
+    ): Event
+
+    updateEvent(
+      id: ID!
+      name: String
+      description: String
+      venue: String
+      location: String
+      eventDate: String
+      eventTime: String
+      tags: [String]
+      price: Float
+      url: String
+    ): Event
+
+    deleteEvent(
+      id: ID!
     ): Event
 
     addToCart(
-      userId: ID!, 
+      userId: ID!
       eventId: ID!
     ): User
 
     removeFromCart(
-      userId: ID!,
+      userId: ID!
       eventId: ID!
     ): User
 

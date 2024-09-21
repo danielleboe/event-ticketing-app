@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import { useNavigate } from 'react-router-dom';
-import { GET_EVENTS } from "../utils/queries"; // Import the query for fetching events
 import "../styles/Home.css";
+import { Link } from "react-router-dom";
 
-const Home = () => {
+
+const Home = ({ user, onLogout }) => {
   const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -12,40 +14,89 @@ const Home = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Function to handle search action
+
   const handleSearch = (e) => {
     e.preventDefault(); // Prevent default form submission
     navigate(`/search?keyword=${search}`);
     console.log("Search initiated for:", search);
   };
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // Filter events based on search input
+  // // Fetch user purchase history if user is logged in
+  // const { loading: userLoading, error: userError } = useQuery(GET_USER_PURCHASE_HISTORY, {
+  //   variables: { id: user?.id },
+  //   skip: !user,
+  // });
+
+  // Fetch events
+
+
+  // // Handle loading and error states
+  // if (userLoading || eventsLoading) return <p>Loading...</p>;
+  // if (userError || eventsError) return <p>Error: {userError?.message || eventsError?.message}</p>;
+
+  // // Retrieve purchase history and created event history from the user data
+  // const purchaseHistory = userData?.user?.purchaseHistory || [];
+  // const createdEventHistory = userData?.user?.createdEventHistory || [];
+
+  // // Filter upcoming and past events from the user's purchase history
+  // const currentDate = new Date();
+  // const upcomingEvents = purchaseHistory.filter(event => new Date(event.date) > currentDate);
+  // const pastEvents = purchaseHistory.filter(event => new Date(event.date) <= currentDate);
+
+  // Filter events based on search, price, and date
   const filteredEvents = data.events.filter((event) => {
-    // Search filter (checking name, location, venue, and tags)
     const matchesSearch =
       event.name.toLowerCase().includes(search.toLowerCase()) ||
       event.location.toLowerCase().includes(search.toLowerCase()) ||
       event.venue.toLowerCase().includes(search.toLowerCase()) ||
       event.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
-  
-    // Date filter
-    const matchesDate = selectedDate ? event.date === selectedDate : true;
-  
-    // Price filters
+
+    const matchesDate = selectedDate ? event.eventDate === selectedDate : true;
     const price = event.price;
-    const matchesMinPrice = minPrice ? price >= minPrice : true;
-    const matchesMaxPrice = maxPrice ? price <= maxPrice : true;
-  
+    const matchesMinPrice = minPrice ? price >= parseFloat(minPrice) : true;
+    const matchesMaxPrice = maxPrice ? price <= parseFloat(maxPrice) : true;
+
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
 
+  // // Render events
+  // const renderEvents = (events) => (
+  //   <div className="event-container">
+  //     {events.map((event) => (
+  //       <div key={event.id} className="event-card">
+  //         <a href={event.url} className="event-link">
+  //           <h2>{event.name}</h2>
+  //           <p>{event.description}</p>
+  //           <p>{event.date}</p>
+  //           <p>{event.venue}</p>
+  //           <p>{event.location}</p>
+  //           <p>${event.price.toFixed(2)}</p>
+  //           <p>Tags: {event.tags.join(', ')}</p>
+  //         </a>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
+
+  // Handle search submission
+
+
   return (
-    <div>
-      {/* Search Bar */}
-      <div>
+    <div className="home">
+      <div className="auth-buttons">
+        {user ? (
+          <button className="logout-button" onClick={onLogout}>Logout</button>
+        ) : (
+          <Link to="/login">
+            <button className="login-button">Login</button>
+          </Link>
+        )}
+      </div>
+
+  {/* Search Bar */}
+  <div>
         <form onSubmit={handleSearch} className="search-container">
           <input
             type="text"
@@ -98,17 +149,39 @@ const Home = () => {
         {filteredEvents.map((event) => (
           <div key={event.id} className="event-card">
             <a href={`/events/${event.id}`} className="event-link">
-              <h2>{event.name}</h2>
+              <h2 className="eventHeadline">{event.name}</h2>
               <p>{event.description}</p>
-              <p>{event.eventDate}  {event.eventTime}</p>
+              <p>{event.eventDate} {event.eventTime}</p>
               <p>{event.venue}</p>
               <p>{event.location}</p>
               <p>${event.price.toFixed(2)}</p>
-              <p>Tags: {event.tags.join(', ')}</p> {/* Display the tags */}
+              <p>Tags: {event.tags.join(', ')}</p>
             </a>
           </div>
         ))}
       </div>
+
+
+      {/* {user ? (
+        <>
+          <h1>Welcome, {user.username}</h1>
+          <p>Email: {user.email}</p>
+
+          <h2>Upcoming Events</h2>
+          {renderEvents(upcomingEvents)}
+
+          <h2>Past Events</h2>
+          {renderEvents(pastEvents)}
+
+          <h2>Created Events</h2>
+          {renderEvents(createdEventHistory)}
+        </>
+      ) : (
+        <>
+          <h1>Upcoming Events</h1>
+          {renderEvents(filteredEvents)}
+        </>
+      )} */}
     </div>
   );
 };
