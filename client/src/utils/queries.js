@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+//Events
 // get all events
 export const GET_EVENTS = gql`
   query GetEvents {
@@ -41,12 +42,13 @@ export const SEARCH_EVENTS = gql`
     searchEvents(keyword: $keyword) {
       id
       name
-      url
       purchaseDate
     }
   }
 `;
 
+
+//cart and purchase
 // Add a query to fetch the user's purchase history
 export const GET_USER_PURCHASE_HISTORY = gql`
   query GetUserPurchaseHistory($id: ID!) {
@@ -68,86 +70,53 @@ export const GET_USER_PURCHASE_HISTORY = gql`
   }
 `;
 
- 
-// Mutation to create a new event
-export const ADD_EVENT = gql`
-  mutation AddEvent(
-    $name: String!
-    $description: String!
-    $venue: String!
-    $location: String!
-    $eventDate: String!
-    $eventTime: String!
-    $tags: [String]
-    $price: Float!
-    $url: String
-  ) {
-    addEvent(
-      name: $name
-      description: $description
-      venue: $venue
-      location: $location
-      eventDate: $eventDate
-      eventTime: $eventTime
-      tags: $tags
-      price: $price
-      url: $url
-    ) {
-      id
-      name
-      description
-      venue
-      location
-      eventDate
-      eventTime
-      tags
-      price
-      createdBy
+
+
+//Users
+// get all users
+export const GET_USERS = gql`
+  query GetUsers {
+    users {
+      _id
+      username
+      email
+      purchaseHistory {
+        id
+        name
+        date
+        url
+        purchaseDate
+      }
+      createdEventHistory { 
+        id
+        name
+        date
+        url
+      }
     }
   }
 `;
 
-// Mutation to update an existing event
-export const UPDATE_EVENT = gql`
-  mutation UpdateEvent(
-    $id: ID!
-    $name: String
-    $description: String
-    $venue: String
-    $location: String
-    $eventDate: String
-    $eventTime: String
-    $tags: [String]
-    $price: Float
-  ) {
-    updateEvent(
-      id: $id
-      name: $name
-      description: $description
-      venue: $venue
-      location: $location
-      eventDate: $eventDate
-      eventTime: $eventTime
-      tags: $tags
-      price: $price
-    ) {
-      id
-      name
-      description
-      venue
-      location
-      eventDate
-      eventTime
-      tags
-      price
-      createdBy
+//get a single user
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      _id
+      username
+      email
+      purchaseHistory {
+        id
+        name
+        date
+        url
+        purchaseDate
+      }
+      createdEventHistory { 
+        id
+        name
+        date
+        url
+      }
     }
-  }
-`;
-
-// Mutation to delete an event
-export const DELETE_EVENT = gql`
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
   }
 `;

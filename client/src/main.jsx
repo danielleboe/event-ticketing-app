@@ -1,19 +1,30 @@
 import ReactDOM from 'react-dom/client';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
+import { setContext } from '@apollo/client/link/context';
 
 import App from './App.jsx';
-// import Home from './pages/Home';
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:3001/graphql', // Ensure this matches your server configuration
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = sessionStorage.getItem('authToken');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: '/graphql',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
-// Get the root element
 const rootElement = document.getElementById('root');
-
-// Use createRoot instead of render
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <ApolloProvider client={client}>

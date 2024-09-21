@@ -1,7 +1,43 @@
 // Mutation to create a new event
 import { gql } from '@apollo/client';
 
-// Mutation to create a new event
+
+
+//USERS AUTH
+export const LOGIN_USER = gql`
+  mutation loginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password) {
+      user {
+        _id
+        username
+        email
+      }
+      token
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+        email
+      }
+    }
+  }
+`;
+
+///EVENTS
+// Mutation to delete an event
+export const DELETE_EVENT = gql`
+  mutation DeleteEvent($id: ID!) {
+    deleteEvent(id: $id)
+  }
+`;
+
 export const ADD_EVENT = gql`
   mutation AddEvent(
     $name: String!
@@ -34,10 +70,12 @@ export const ADD_EVENT = gql`
       eventTime
       tags
       price
-      
+      url
     }
   }
 `;
+
+
 
 // Mutation to update an existing event
 export const UPDATE_EVENT = gql`
@@ -79,10 +117,24 @@ export const UPDATE_EVENT = gql`
   }
 `;
 
+
 // Mutation to delete an event
 export const DELETE_EVENT = gql`
   mutation DeleteEvent($id: ID!) {
     deleteEvent(id: $id)
   
+//Cart & Purchase
+
+export const ADD_TO_CART = gql`
+  mutation AddToCart($eventId: ID!, $quantity: Int!) {
+    addToCart(eventId: $eventId, quantity: $quantity) {
+      id
+      tickets {
+        eventId
+        quantity
+      }
+    }
   }
 `;
+
+

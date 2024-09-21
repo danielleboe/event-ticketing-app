@@ -1,28 +1,28 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { GET_EVENTS } from "../utils/queries";
 import { DELETE_EVENT } from '../utils/mutations';
+import { GET_USER_PURCHASE_HISTORY, GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import "../styles/Home.css";
-import EventForm from './EventForm'; // Import the EventForm component
+import { Link } from "react-router-dom";
 
-const Home = () => {
-  const { loading, error, data } = useQuery(GET_EVENTS);
-  const [deleteEvent] = useMutation(DELETE_EVENT);
+const Home = ({ user, onLogout }) => {
+
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
-  console.log("loading:", loading);
-  console.log("error:", error);
-  console.log("data:", data);
+  // Fetch user purchase history if user is logged in
+  const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER_PURCHASE_HISTORY, {
+    variables: { id: user?.id },
+    skip: !user,
+  });
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    navigate(`/search?keyword=${search}`);
-  };
+  // Fetch events
+  const { loading: eventsLoading, error: eventsError, data: eventsData } = useQuery(GET_EVENTS);
+
 
   const handleDelete = async (eventId) => {
     try {
@@ -37,8 +37,19 @@ const Home = () => {
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
+ 
 
-  const filteredEvents = data.events.filter((event) => {
+  // Retrieve purchase history and created event history from the user data
+  const purchaseHistory = userData?.user?.purchaseHistory || [];
+  const createdEventHistory = userData?.user?.createdEventHistory || [];
+
+  // Filter upcoming and past events from the user's purchase history
+  const currentDate = new Date();
+  const upcomingEvents = purchaseHistory.filter(event => new Date(event.date) > currentDate);
+  const pastEvents = purchaseHistory.filter(event => new Date(event.date) <= currentDate);
+
+  // Filter events based on search, price, and date
+  const filteredEvents = eventsData.events.filter((event) => {
     const matchesSearch =
       event.name.toLowerCase().includes(search.toLowerCase()) ||
       event.location.toLowerCase().includes(search.toLowerCase()) ||
@@ -55,15 +66,46 @@ const Home = () => {
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
 
+  // Render events
+  const renderEvents = (events) => (
+    <div className="event-container">
+      {events.map((event) => (
+        <div key={event.id} className="event-card">
+          <a href={event.url} className="event-link">
+            <h2>{event.name}</h2>
+            <p>{event.description}</p>
+            <p>{event.date}</p>
+            <p>{event.venue}</p>
+            <p>{event.location}</p>
+            <p>${event.price.toFixed(2)}</p>
+            <p>Tags: {event.tags.join(', ')}</p>
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+
+  // Handle search submission
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?keyword=${search}`);
+  };
+
   return (
-    <div>
-      <h1>Welcome to the Event Ticketing App</h1>
+    <div className="home">
+      <div className="auth-buttons">
+        {user ? (
+          <button className="logout-button" onClick={onLogout}>Logout</button>
+        ) : (
+          <Link to="/login">
+            <button className="login-button">Login</button>
+          </Link>
+        )}
+      </div>
 
-      {/* Render the EventForm component above the search bar
-      <EventForm /> */}
 
-      {/* Search Bar */}
-      <div>
+  {/* Search Bar */}
+  <div>
         <form onSubmit={handleSearch} className="search-container">
           <input
             type="text"
@@ -116,7 +158,7 @@ const Home = () => {
         {filteredEvents.map((event) => (
           <div key={event.id} className="event-card">
             <a href={`/events/${event.id}`} className="event-link">
-              <h2>{event.name}</h2>
+              <h2 className="eventHeadline">{event.name}</h2>
               <p>{event.description}</p>
               <p>{event.eventDate} {event.eventTime}</p>
               <p>{event.venue}</p>
@@ -124,6 +166,7 @@ const Home = () => {
               <p>${event.price.toFixed(2)}</p>
               <p>Tags: {event.tags.join(', ')}</p>
             </a>
+
             {/* Add Edit Button */}
             <button
               className="button"
@@ -138,9 +181,32 @@ const Home = () => {
             >
               Delete
             </button>
+
           </div>
         ))}
       </div>
+
+
+      {user ? (
+        <>
+          <h1>Welcome, {user.username}</h1>
+          <p>Email: {user.email}</p>
+
+          <h2>Upcoming Events</h2>
+          {renderEvents(upcomingEvents)}
+
+          <h2>Past Events</h2>
+          {renderEvents(pastEvents)}
+
+          <h2>Created Events</h2>
+          {renderEvents(createdEventHistory)}
+        </>
+      ) : (
+        <>
+          <h1>Upcoming Events</h1>
+          {renderEvents(filteredEvents)}
+        </>
+      )}
     </div>
   );
 };
