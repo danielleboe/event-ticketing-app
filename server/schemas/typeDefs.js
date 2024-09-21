@@ -115,7 +115,7 @@ type Purchase {
 
     deleteEvent(
       id: ID!
-    ): Event
+    ): Boolean
 
     addToCart(
       userId: ID!
