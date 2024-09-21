@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { GET_EVENTS } from "../utils/queries"; // Import the query for fetching events
+import { GET_EVENTS } from "../utils/queries";
+import { DELETE_EVENT } from '../utils/mutations';
 import "../styles/Home.css";
 import EventForm from './EventForm'; // Import the EventForm component
 
 const Home = () => {
   const { loading, error, data } = useQuery(GET_EVENTS);
+  const [deleteEvent] = useMutation(DELETE_EVENT);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -22,6 +24,17 @@ const Home = () => {
     navigate(`/search?keyword=${search}`);
   };
 
+  const handleDelete = async (eventId) => {
+    try {
+      const { data } = await deleteEvent({ variables: { id: eventId } });
+      if (data.deleteEvent) {
+        console.log("Event deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error deleting event:", err);
+    }
+  };
+  
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -36,6 +49,8 @@ const Home = () => {
     const price = event.price;
     const matchesMinPrice = minPrice ? price >= parseFloat(minPrice) : true;
     const matchesMaxPrice = maxPrice ? price <= parseFloat(maxPrice) : true;
+
+   
 
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
@@ -115,6 +130,13 @@ const Home = () => {
               onClick={() => navigate(`/events/edit/${event.id}`)}
             >
               Edit
+            </button>
+               {/* Delete Button */}
+            <button
+              className="button"
+              onClick={() => handleDelete(event.id)}
+            >
+              Delete
             </button>
           </div>
         ))}

@@ -75,6 +75,16 @@ const resolvers = {
         throw new Error('Error updating event: ' + err.message);
       }
     },
+    deleteEvent: async (parent, { id }) => {
+      try {
+        await Events.findByIdAndDelete(id);
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+    
 },
 
   User: {
