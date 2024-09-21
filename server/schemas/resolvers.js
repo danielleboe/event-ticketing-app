@@ -83,14 +83,26 @@ const resolvers = {
       };
     },
 
-    addToCart: async (_, { userId, eventId }) => {
-      const user = await Users.findById(userId);
-      if (!user) throw new Error("User not found");
-      if (!user.cart.includes(eventId)) {
-        user.cart.push(eventId);
-        await user.save();
+    addToCart: async (_, { eventId, quantity }, context) => {
+      // Example check for user session (if needed)
+      const user = context.user; // Assuming you're using some form of authentication
+      
+      if (!user) throw new Error("User not authenticated");
+    
+      // Find the user or create a new cart
+      const foundUser = await Users.findById(user._id);
+      if (!foundUser) throw new Error("User not found");
+    
+      // Add to cart logic
+      const existingItem = foundUser.cart.find(item => item.eventId.toString() === eventId);
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        foundUser.cart.push({ eventId, quantity });
       }
-      return user;
+    
+      await foundUser.save();
+      return foundUser; // Or return the cart
     },
 
     removeFromCart: async (parent, { userId, eventId }) => {

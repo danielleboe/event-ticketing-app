@@ -31,7 +31,7 @@
   
   /* Modal Content/Box */
   .modal-content {
-    font-family: "Poppins", Helvetica, Arial, sans-serif;
+    font-family:Nunito,'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
       background-color: #ececec;
       margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
       /* border: 1px solid #888; */

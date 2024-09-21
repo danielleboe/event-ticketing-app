@@ -4,6 +4,9 @@ import { GET_EVENT } from '../utils/queries';
 import { ADD_TO_CART } from '../utils/mutations';
 import { useParams } from 'react-router-dom';  // Import useParams
 import "../styles/Event.css";
+// import concertImage from '../assets/concert.png'; // Adjust the path as necessary
+import festivalImage from '../assets/speaker.jpg'; // Adjust the path as necessary
+
 
 const EventPage = () => {
   const { id: eventId } = useParams();  // Extract eventId from URL params
@@ -19,6 +22,7 @@ const EventPage = () => {
       await addToCart({
         variables: { eventId, quantity },
       });
+      console.log(`handleaddtocart`, eventId,quantity );
       alert('Tickets added to cart!');
     } catch (err) {
       console.error(err);
@@ -32,7 +36,9 @@ const EventPage = () => {
   const { name, description, venue, location, eventDate, eventTime, tags, price } = data.event;
 
   return (
-    <div>
+    <div className="eventContainer">
+      <img className="heroImage" src={festivalImage} alt="Concert"/>
+      <div className="event-page">
       <h1>{name}</h1>
       <p>{description}</p>
       <p><strong>Venue:</strong> {venue}</p>
@@ -41,7 +47,7 @@ const EventPage = () => {
       <p><strong>Time:</strong> {eventTime}</p>
       <p><strong>Tags:</strong> {tags.join(', ')}</p>
       <p><strong>Price:</strong> ${price}</p>
-      <div>
+      <div className="tickets">
         <label>
           Ticket Quantity:
           <input
@@ -51,8 +57,9 @@ const EventPage = () => {
             min="1"
           />
         </label>
-        <button onClick={handleAddToCart}>Add to Cart</button>
+        <button className="button" onClick={handleAddToCart}>Add to Cart</button>
       </div>
+    </div>
     </div>
   );
 };

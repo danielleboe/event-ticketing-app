@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+html {
+  background-color: #27233a;
+}
+
+.event-page {
+  padding: 30px;
+  background-color: white;
+  /* background-color: #DEC0F1; */
+  border-radius: 12px;
+  max-width: 800px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #27233a;
+  min-height:700px;
+}
+
+.event-page h1 {
+  font-size: 24px;
+}
+
+.event-page p {
+  margin: 30px 0;
+}
+
+.event-page input {
+  width: 50px;
+  margin-left: 10px;
+}
+
+.event-page button {
+  margin-top: 10px;
+}
+
+.heroImage {
+  width: 100%;
+  /* max-width: 900px; */
+  margin: auto;
+}
+
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  font-family: Nunito, "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+    sans-serif;
+}
+
+.button {
+  font: inherit;
+  font-size: 1.25rem;
+  padding: 0.4em 0.2em;
+  width: 20%;
+  font-weight: 500;
+  background-color: #735cdd;
+  border-radius: 6px;
+  color: #fff;
+  border: 0;
+  margin: 10px 10px 10px 20px;
+}
+
+
+.tickets{
+    margin-top: 40px;
+}
