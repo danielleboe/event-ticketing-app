@@ -5,7 +5,7 @@ import { ADD_TO_CART } from '../utils/mutations';
 import { useParams } from 'react-router-dom';  // Import useParams
 import "../styles/Event.css";
 // import concertImage from '../assets/concert.png'; // Adjust the path as necessary
-import festivalImage from '../assets/speaker.jpg'; // Adjust the path as necessary
+// import festivalImage from '../assets/speaker.jpg'; // Adjust the path as necessary
 
 
 const EventPage = () => {
@@ -37,7 +37,7 @@ const EventPage = () => {
 
   return (
     <div className="eventContainer">
-      <img className="heroImage" src={festivalImage} alt="Concert"/>
+      {/* <img className="heroImage" src={festivalImage} alt="Concert"/> */}
       <div className="event-page">
       <h1>{name}</h1>
       <p>{description}</p>

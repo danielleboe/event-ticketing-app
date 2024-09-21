@@ -155,7 +155,7 @@ const Home = ({ user, onLogout }) => {
       </div>
 
 
-      {/* {user ? (
+      {user ? (
         <>
           <h1>Welcome, {user.username}</h1>
           <p>Email: {user.email}</p>
@@ -174,7 +174,7 @@ const Home = ({ user, onLogout }) => {
           <h1>Upcoming Events</h1>
           {renderEvents(filteredEvents)}
         </>
-      )} */}
+      )}
     </div>
   );
 };
