@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
+<<<<<<< HEAD
     user: async (_, { _id }) => await Users.findById(_id),
 
     events: async () => await Events.find().populate("createdBy"),
@@ -19,8 +20,29 @@ const resolvers = {
       } catch (error) {
         console.error("Error fetching event:", error);
         throw new Error("Could not fetch event");
+=======
+    user: async (parent, { id }) => await Users.findById(id),
+    events: async () => await Events.find(),
+    event: async (parent, { id }) => await Events.findById(id),
+  },
+
+  Mutation: {
+    addUser: async (parent, args) => {
+      const newUser = new Users(args);
+      newUser.password = await bcrypt.hash(password, 10)
+      return await newUser.save();
+    },
+
+    addToCart: async (parent, { userId, eventId }) => {
+      const user = await Users.findById(userId);
+      if (!user) throw new Error('User not found');
+      if (!user.cart.includes(eventId)) {
+        user.cart.push(eventId);
+        await user.save();
+>>>>>>> 41c8552ea6b22382d00019d62e8bc384427c10d3
       }
     },
+<<<<<<< HEAD
   },
 
   Mutation: {
@@ -104,6 +126,8 @@ const resolvers = {
       await foundUser.save();
       return foundUser; // Or return the cart
     },
+=======
+>>>>>>> 41c8552ea6b22382d00019d62e8bc384427c10d3
 
     removeFromCart: async (parent, { userId, eventId }) => {
       const user = await Users.findById(userId);
@@ -132,6 +156,7 @@ const resolvers = {
       return user;
     },
 
+<<<<<<< HEAD
     addEvent: async (_, args) => {
       console.log('Received args:', args);
       try {
@@ -158,6 +183,13 @@ const resolvers = {
       }
     },
 },
+=======
+    addEvent: async (parent, args) => {
+      const newEvent = new Event(args);
+      return await newEvent.save();
+    },
+  },
+>>>>>>> 41c8552ea6b22382d00019d62e8bc384427c10d3
 
   User: {
     // Update purchaseHistory resolver to include purchaseDate and event URL
@@ -178,7 +210,11 @@ const resolvers = {
   },
 
   Event: {
+<<<<<<< HEAD
     createdBy: async (parent) => await Users.findById(parent.createdBy),  // Use 'parent.createdBy'
+=======
+    createdBy: async (parent, event) => await Users.find({ _id: { $in: Events.createdBy } }),
+>>>>>>> 41c8552ea6b22382d00019d62e8bc384427c10d3
   }
 };
 

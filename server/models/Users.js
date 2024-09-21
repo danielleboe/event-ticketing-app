@@ -52,6 +52,7 @@ const usersSchema = new Schema(
   }
 );
 
+<<<<<<< HEAD
 // usersSchema.pre('save', async function (next) {
 //   if (this.isNew || this.isModified('password')) {
 //     const saltRounds = 10;
@@ -60,6 +61,22 @@ const usersSchema = new Schema(
 //   }
 //   next();
 // });
+=======
+usersSchema.pre('save', async function (next) {
+  console.log('Pre-save hook called');
+  if (this.isNew || this.isModified('password')) {
+    try {
+      const saltRounds = 10;
+      this.password = await bcrypt.hash(this.password, saltRounds);
+      console.log('Hashed password:', this.password);
+    } catch (err) {
+      console.error('Error hashing password:', err);
+      return next(err);
+    }
+  }
+  next();
+});
+>>>>>>> 41c8552ea6b22382d00019d62e8bc384427c10d3
 
 // usersSchema.methods.isCorrectPassword = async function (password) {
 //   console.log(`Password entered: ${password}`);  // Plain text entered
