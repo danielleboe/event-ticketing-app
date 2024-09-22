@@ -31,12 +31,6 @@ export const CREATE_USER = gql`
 `;
 
 ///EVENTS
-// Mutation to delete an event
-export const DELETE_EVENT = gql`
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
-  }
-`;
 
 export const ADD_EVENT = gql`
   mutation AddEvent(
@@ -122,19 +116,19 @@ export const UPDATE_EVENT = gql`
 export const DELETE_EVENT = gql`
   mutation DeleteEvent($id: ID!) {
     deleteEvent(id: $id)
+  }
+`;
   
 //Cart & Purchase
 
 export const ADD_TO_CART = gql`
-  mutation AddToCart($eventId: ID!, $quantity: Int!) {
-    addToCart(eventId: $eventId, quantity: $quantity) {
-      id
-      tickets {
-        eventId
-        quantity
-      }
+mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
+  addToCart(_id: $_id, eventId: $eventId, quantity: $quantity) {
+    _id
+    cart {
+      eventId
+      quantity
     }
   }
-`;
-
-
+}
+`
