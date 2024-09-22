@@ -120,3 +120,19 @@ export const GET_USER = gql`
     }
   }
 `;
+// client/src/utils/queries.js
+export const GET_USER_CART = gql`
+  query GetUserCart($id: ID!) {
+    user(id: $id) {
+      cart {
+        eventId {
+          id
+          name
+          url
+        }
+        quantity
+        price
+      }
+    }
+  }
+`;
