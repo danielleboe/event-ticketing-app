@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from 'react-router-dom';
-import { DELETE_EVENT } from '../utils/mutations';
 import { GET_USER_PURCHASE_HISTORY, GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
@@ -32,16 +31,7 @@ const Home = ({ user, onLogout }) => {
 
   // Fetch events
 
-  const handleDelete = async (eventId) => {
-    try {
-      const { data } = await deleteEvent({ variables: { id: eventId } });
-      if (data.deleteEvent) {
-        console.log("Event deleted successfully");
-      }
-    } catch (err) {
-      console.error("Error deleting event:", err);
-    }
-  };
+
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -184,13 +174,7 @@ const Home = ({ user, onLogout }) => {
             >
               Edit
             </button>
-               {/* Delete Button */}
-            <button
-              className="button"
-              onClick={() => handleDelete(event.id)}
-            >
-              Delete
-            </button>
+             
 
           </div>
         ))}
