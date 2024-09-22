@@ -7,11 +7,13 @@ import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
 import Navbar from './components/Navbar'; // Capitalize the component name
+import Cart from './pages/Cart'; // Capitalize the component name
+
 import './App.css';
 
 function App() {
-
-  const [user, setUser] = useState(null); // Start with null for a real scenario
+  const [user, setUser] = useState(null); // User state
+  const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -31,6 +33,12 @@ function App() {
     console.log(isLoggedIn ? 'Logged In' : 'Logged Out');
   }, [isLoggedIn]);
 
+  const handleAddToCart = (eventId, quantity) => {
+    setCart((prevCart) => [...prevCart, { eventId, quantity }]);
+    console.log(`Added ${quantity} tickets for event ${eventId} to cart.`);
+  };
+
+
   return (
     <>
       {/* Navbar outside the Routes to appear on all pages */}
@@ -44,10 +52,13 @@ function App() {
           element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} 
         />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/events/:id" element={<EventPage />} />
+        <Route path="/events/:id" element={<EventPage onAddToCart={handleAddToCart} />} />
         <Route path="/events/new" element={<EventForm />} />
+    
+        <Route path="/cart" element={<Cart cart={cart} />} />
         <Route path="/events/edit/:id" element={<EditEventForm />} />
       </Routes>
+
     </>
   );
 }
