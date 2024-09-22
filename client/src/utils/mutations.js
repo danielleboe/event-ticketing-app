@@ -46,9 +46,9 @@ export const ADD_EVENT = gql`
     $location: String!
     $eventDate: String!
     $eventTime: String!
-    $tags: [String!]
+    $tags: [String!]!
     $price: Float!
-    $url: String
+    $url: String!
   ) {
     addEvent(
       name: $name
@@ -60,7 +60,7 @@ export const ADD_EVENT = gql`
       tags: $tags
       price: $price
       url: $url
-    ) {
+   ) {
       id
       name
       description
@@ -116,12 +116,6 @@ export const UPDATE_EVENT = gql`
     }
   }
 `;
-
-
-// Mutation to delete an event
-export const DELETE_EVENT = gql`
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
   
 //Cart & Purchase
 
