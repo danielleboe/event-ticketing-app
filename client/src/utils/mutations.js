@@ -122,13 +122,13 @@ export const DELETE_EVENT = gql`
 //Cart & Purchase
 
 export const ADD_TO_CART = gql`
-  mutation AddToCart($eventId: ID!, $quantity: Int!) {
-    addToCart(eventId: $eventId, quantity: $quantity) {
-      id
-      tickets {
-        eventId
-        quantity
-      }
+mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
+  addToCart(_id: $_id, eventId: $eventId, quantity: $quantity) {
+    _id
+    cart {
+      eventId
+      quantity
     }
   }
+}
 `

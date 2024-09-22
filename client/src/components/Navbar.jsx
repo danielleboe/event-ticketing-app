@@ -13,7 +13,7 @@ const Navbar = ({ user, onLogout }) => {
   const handleLogout = () => {
     onLogout();
     navigate("/login");
-  };
+  };ƒ
 
   const isLoggedIn = !!user;
 
