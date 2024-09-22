@@ -7,15 +7,10 @@ import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
-
+import TestingCartPage from './pages/TestingCartPage.jsx'; // Import the TestingCartPage component
 
 function App() {
-  const dummyUser = {
-    id: '1', // Replace with actual user ID
-    username: 'johndoe',
-    email: 'johndoe@example.com',
-    // Add more user details as needed
-  };
+
 
   const [user, setUser] = useState(null); // Start with null for a real scenario
   const navigate = useNavigate();
@@ -40,16 +35,12 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
-      <Route 
-        path="/profile" 
-        element={user ? <UserProfile user={user} /> : <Navigate to="/login" />}
-      />
+      <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />
       <Route path="/login" element={<Login onLogin={handleLogin} />} />
-      <Route path="/" element={<Home />} />
-      <Route path="/profile" element={<UserProfile user={dummyUser} />} /> {/* Add the route for the user profile */}
-      <Route path="/events/:id" element={<EventPage/>} />
+      <Route path="/events/:id" element={<EventPage />} />
       <Route path="/events/new" element={<EventForm />} />
       <Route path="/events/edit/:id" element={<EditEventForm />} />
+      <Route path="/testing-cart" element={<TestingCartPage user={user} />} />
     </Routes>
   );
 }

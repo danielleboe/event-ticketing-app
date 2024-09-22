@@ -5,8 +5,16 @@ import { GET_USER_CART } from '../utils/queries';
 import { UPDATE_CART_ITEM_QUANTITY, REMOVE_CART_ITEM } from '../utils/mutations';
 
 const Cart = ({ userId }) => {
+    console.log('Fetching cart for user ID:', userId); // Log user ID
+
   const { loading, error, data } = useQuery(GET_USER_CART, {
     variables: { id: userId },
+    onCompleted: (data) => {
+      console.log('Cart data received:', data);
+    },
+    onError: (error) => {
+      console.error('Error fetching cart data:', error);
+    },
   });
 
   const [updateCartItemQuantity] = useMutation(UPDATE_CART_ITEM_QUANTITY);
@@ -15,6 +23,10 @@ const Cart = ({ userId }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  if (!data || !data.user || !data.user.cart) {
+    console.error('Cart data is undefined');
+    return <p>No cart data available.</p>;
+  }
   const cartItems = data.user.cart;
 
   const calculateTotalPrice = (quantity, price) => {

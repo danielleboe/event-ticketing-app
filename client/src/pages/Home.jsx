@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import { useNavigate } from 'react-router-dom';
-import { GET_USER_PURCHASE_HISTORY, GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
 
@@ -192,6 +191,8 @@ const Home = ({ user, onLogout }) => {
 
           </div>
         ))}
+                  <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button>
+
       </div>
 
 
