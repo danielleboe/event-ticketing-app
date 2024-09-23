@@ -125,19 +125,19 @@ type Purchase {
       id: ID!
     ): Boolean
 
-    addToCart(userId: ID!, 
+    addToCart(
+      userId: ID!, 
       eventId: ID!, 
-     quantity: Int!,
-     price: Float,
-     ): Cart
+      quantity: Int!
+    ): Users
 
     removeFromCart(
-      userId: ID!
+      id: ID!
       eventId: ID!
     ): User
 
     purchaseCart(
-      userId: ID!
+      id: ID!
     ): User
   }
 `;

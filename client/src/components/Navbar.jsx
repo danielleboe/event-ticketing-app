@@ -6,6 +6,8 @@ const Navbar = ({ user, onLogout }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
 
+
+
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
@@ -13,8 +15,7 @@ const Navbar = ({ user, onLogout }) => {
   const handleLogout = () => {
     onLogout();
     navigate("/login");
-  };ƒ
-
+  };
   const isLoggedIn = !!user;
 
   useEffect(() => {
