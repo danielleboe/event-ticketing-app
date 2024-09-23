@@ -42,21 +42,28 @@ function App() {
   return (
     <>
       {/* Navbar outside the Routes to appear on all pages */}
-      <Navbar /> 
+      <Navbar user={user} onLogout={handleLogout} />
       
       {/* Define your routes */}
       <Routes>
         <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
         <Route 
           path="/profile" 
-          element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} 
+          element={isLoggedIn ? <UserProfile user={user} /> : <Navigate to="/login" />} 
         />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/events/:id" element={<EventPage onAddToCart={handleAddToCart} />} />
-        <Route path="/events/new" element={<EventForm />} />
+        <Route
+         path="/login" 
+        element={<Login onLogin={handleLogin} />} />
+        <Route
+         path="/events/:id" 
+        element={<EventPage onAddToCart={handleAddToCart} />} />
+        <Route 
+        path="/events/new" 
+        element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
     
         <Route path="/cart" element={<Cart cart={cart} />} />
-        <Route path="/events/edit/:id" element={<EditEventForm />} />
+        <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
+       />
       </Routes>
 
     </>

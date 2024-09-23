@@ -117,6 +117,9 @@ export const GET_USER = gql`
         date
         url
       }
-    }
-  }
+        cart{
+        eventId
+        quantity
+      },
+}}
 `;
