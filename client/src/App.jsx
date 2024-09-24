@@ -8,12 +8,14 @@ import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
 import Navbar from './components/Navbar'; // Capitalize the component name
 import Cart from './pages/Cart'; // Capitalize the component name
+import OrderConfirmation from './pages/OrderConfirmation';
 
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(null); // User state
   const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -64,6 +66,8 @@ function App() {
         <Route path="/cart" element={<Cart cart={cart} />} />
         <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
        />
+        <Route path="/order-confirmation" element={<OrderConfirmation order={order} />} />
+
       </Routes>
 
     </>
