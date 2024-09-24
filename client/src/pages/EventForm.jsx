@@ -17,7 +17,7 @@ const EventForm = ({ eventId }) => {
     location: '',
     eventDate: '',
     eventTime: '',
-    tags: '',
+    tags: [],
     price: '',
     url: ''
   });

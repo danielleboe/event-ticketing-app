@@ -33,7 +33,7 @@ const Navbar = ({ user, onLogout }) => {
           <Link to="/events/new">Add an Event</Link>
         </li>
         <li>
-          <Link to="/search">Search</Link>
+          <Link to="/">Search</Link>
         </li>
         <li>
           <Link to="/profile">Profile</Link>
