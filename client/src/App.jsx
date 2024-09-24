@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
-import TestingCartPage from './pages/TestingCartPage.jsx'; // Import the TestingCartPage component
+// import TestingCartPage from './pages/TestingCartPage.jsx'; // Import the TestingCartPage component
 
 function App() {
 
@@ -40,7 +40,7 @@ function App() {
       <Route path="/events/:id" element={<EventPage />} />
       <Route path="/events/new" element={<EventForm />} />
       <Route path="/events/edit/:id" element={<EditEventForm />} />
-      <Route path="/testing-cart" element={<TestingCartPage user={user} />} />
+      {/* <Route path="/testing-cart" element={<TestingCartPage user={user} />} /> */}
     </Routes>
   );
 }

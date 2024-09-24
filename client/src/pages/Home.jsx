@@ -191,7 +191,7 @@ const Home = ({ user, onLogout }) => {
 
           </div>
         ))}
-                  <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button>
+                  {/* <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button> */}
 
       </div>
 

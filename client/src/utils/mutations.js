@@ -150,3 +150,19 @@ export const REMOVE_CART_ITEM = gql`
   }
 `;
 
+export const ADD_TO_CART = gql`
+  mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
+    addToCart(userId: $userId, eventId: $eventId, quantity: $quantity) {
+      cart {
+        eventId {
+          id
+          name
+          price
+          url
+        }
+        quantity
+        price
+      }
+    }
+  }
+`;
