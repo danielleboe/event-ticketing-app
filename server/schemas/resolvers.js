@@ -1,13 +1,29 @@
-const { Users, Events } = require("../models");
+const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
-const Order = require('./models/Order');
-// const jwt = require("jsonwebtoken");
 
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
-    user: async (_, { _id }) => await Users.findById(_id),
+    user: async (_, { _id }) => {
+      console.log('Fetching user with ID:', _id); // Log user ID
+
+      try {
+        const user = await Users.findById(_id).populate({
+          path: 'cart.eventId',
+          model: 'Events'
+        });
+        if (!user) {
+          throw new Error("User not found");
+        }
+        console.log('User data retrieved:', user); // Log retrieved user data
+
+        return user;
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        throw new Error("Could not fetch user");
+      }
+    },
 
     events: async () => await Events.find().populate("createdBy"),
     event: async (_, { id }) => {
@@ -22,6 +38,26 @@ const resolvers = {
         throw new Error("Could not fetch event");
       }
     },
+      // New resolver for fetching user cart data
+      userCart: async (_, { id }) => {
+        console.log('Fetching cart for user ID:', id); // Log user ID
+  
+        try {
+          const user = await Users.findById(id).populate({
+            path: 'cart.eventId',
+            model: 'Events'
+          });
+          if (!user) {
+            throw new Error("User not found");
+          }
+          console.log('Cart data retrieved:', user.cart); // Log retrieved cart data
+  
+          return user.cart;
+        } catch (error) {
+          console.error("Error fetching cart:", error);
+          throw new Error("Could not fetch cart");
+        }
+      },
   },
 
   Mutation: {

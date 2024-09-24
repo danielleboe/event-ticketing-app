@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_EVENT } from '../utils/queries';
-import { ADD_TO_CART } from '../utils/mutations';
+import { UPDATE_CART_ITEM_QUANTITY } from '../utils/mutations';
 import { useParams } from 'react-router-dom';  // Import useParams
 import "../styles/Event.css";
 
@@ -13,6 +13,10 @@ const EventPage = () => {
   const { loading, error, data } = useQuery(GET_EVENT, {
     variables: { id: eventId },
   });
+  
+  // const [quantity, setQuantity] = useState(1);
+  // const [addToCart] = useMutation(UPDATE_CART_ITEM_QUANTITY);
+
 
   const [addToCart] = useMutation(ADD_TO_CART, {
     onCompleted: () => {
