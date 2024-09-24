@@ -185,12 +185,6 @@ type Order {
     sessionId: String!
   }
 
-type CartItem {
-  eventId: ID!
-  eventName: String!
-  price: Float!
-  quantity: Int!
-}
 
 type PaymentIntent {
   clientSecret: String!

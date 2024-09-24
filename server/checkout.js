@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const stripe = require('../stripe'); // Your Stripe instance
 
-router.post('/create-checkout-session', async (req, res) => {
+router.post('/api/create-checkout-session', async (req, res) => {
   const cartItems = req.body.cartItems; // Assuming you're sending line items from the frontend
 
   try {

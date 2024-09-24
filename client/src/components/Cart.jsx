@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_USER_CART } from '../utils/queries';
 import { REMOVE_CART_ITEM } from '../utils/mutations';

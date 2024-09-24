@@ -13,9 +13,11 @@ const Navbar = ({ user, onLogout }) => {
   };
 
   const handleLogout = () => {
-    onLogout();
-    navigate("/login");
+    sessionStorage.removeItem('authToken');
+    onLogout(); // Call onLogout to update parent state
+    navigate("/login"); // Redirect to the login page
   };
+  
   const isLoggedIn = !!user;
 
   useEffect(() => {

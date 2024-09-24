@@ -1,10 +1,7 @@
 const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
-<<<<<<< HEAD
 // const jwt = require("jsonwebtoken");
-=======
->>>>>>> 3e9e948edc7cfec36a22f359644c7222b3c54417
 
 const resolvers = {
   Query: {

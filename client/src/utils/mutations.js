@@ -148,20 +148,6 @@ mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
 }
 `;
 
-<<<<<<< HEAD
-export const CREATE_PAYMENT_INTENT = gql`
-  mutation CreatePaymentIntent($amount: Int!) {
-    createPaymentIntent(amount: $amount) {
-      clientSecret
-    }
-  }
-`;
-
-
-//Checkout
-
-
-=======
 export const REMOVE_CART_ITEM = gql`
   mutation RemoveCartItem($userId: ID!, $eventId: ID!) {
     removeCartItem(userId: $userId, eventId: $eventId) {
@@ -177,5 +163,4 @@ export const REMOVE_CART_ITEM = gql`
     }
   }
 `;
->>>>>>> 3e9e948edc7cfec36a22f359644c7222b3c54417
 

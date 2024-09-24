@@ -40,5 +40,35 @@ const startApolloServer = async () => {
   });
 };
 
+
+//checkout
+app.post('/api/create-checkout-session', async (req, res) => {
+  const { items } = req.body; // Items should be sent in the body of the request
+
+  try {
+      const session = await stripe.checkout.sessions.create({
+          payment_method_types: ['card'],
+          cart_items_items: items.map(item => ({
+              price_data: {
+                  currency: 'usd',
+                  product_data: {
+                      name: item.name,
+                  },
+                  unit_amount: item.price,
+              },
+              quantity: item.quantity,
+          })),
+          mode: 'payment',
+          success_url: `${process.env.CLIENT_URL}/success`,
+          cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      });
+
+      res.json({ sessionId: session.id });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+
 // Call to start the Apollo server
 startApolloServer();
