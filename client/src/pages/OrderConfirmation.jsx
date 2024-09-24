@@ -2,6 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const OrderConfirmation = ({ order }) => {
+  if (!order) {
+    return <p>No order to display.</p>;
+  }
+
   const { tickets, subtotal, taxes, total } = order;
 
   return (

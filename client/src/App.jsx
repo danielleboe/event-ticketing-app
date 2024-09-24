@@ -40,6 +40,22 @@ function App() {
     console.log(`Added ${quantity} tickets for event ${eventId} to cart.`);
   };
 
+  const handlePurchase = () => {
+    const order = {
+      tickets: cart.map(item => ({
+        eventId: item.eventId,
+        eventName: "Sample Event", // Replace with actual event name
+        location: "Sample Location", // Replace with actual location
+        date: "Sample Date", // Replace with actual date
+        quantity: item.quantity
+      })),
+      subtotal: 100, // Replace with actual subtotal calculation
+      taxes: 10, // Replace with actual tax calculation
+      total: 110 // Replace with actual total calculation
+    };
+    setOrder(order);
+    setCart([]); // Clear the cart after purchase
+  };
 
   return (
     <>
@@ -63,8 +79,8 @@ function App() {
         path="/events/new" 
         element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
     
-        <Route path="/cart" element={<Cart cart={cart} />} />
-        <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
+    <Route path="/cart" element={<Cart cart={cart} onPurchase={handlePurchase} />} />
+    <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
        />
         <Route path="/order-confirmation" element={<OrderConfirmation order={order} />} />
 
