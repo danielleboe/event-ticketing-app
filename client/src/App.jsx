@@ -1,4 +1,3 @@
-import './App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
@@ -7,12 +6,16 @@ import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
-// import TestingCartPage from './pages/TestingCartPage.jsx'; // Import the TestingCartPage component
+
+import Navbar from './components/Navbar'; // Capitalize the component name
+import Cart from './pages/Cart'; // Capitalize the component name
+
+import './App.css';
 
 function App() {
+  const [user, setUser] = useState(null); // User state
+  const [cart, setCart] = useState([]);
 
-
-  const [user, setUser] = useState(null); // Start with null for a real scenario
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -32,19 +35,43 @@ function App() {
     console.log(isLoggedIn ? 'Logged In' : 'Logged Out');
   }, [isLoggedIn]);
 
+  const handleAddToCart = (eventId, quantity) => {
+    setCart((prevCart) => [...prevCart, { eventId, quantity }]);
+    console.log(`Added ${quantity} tickets for event ${eventId} to cart.`);
+  };
+
+
   return (
-    <Routes>
-      <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
-      <Route path="/profile" element={user ? <UserProfile user={user} /> : <Navigate to="/login" />} />
-      <Route path="/login" element={<Login onLogin={handleLogin} />} />
-      <Route path="/events/:id" element={<EventPage />} />
-      <Route path="/events/new" element={<EventForm />} />
-      <Route path="/events/edit/:id" element={<EditEventForm />} />
-      {/* <Route path="/testing-cart" element={<TestingCartPage user={user} />} /> */}
-    </Routes>
+
+    <>
+      {/* Navbar outside the Routes to appear on all pages */}
+      <Navbar user={user} onLogout={handleLogout} />
+      
+      {/* Define your routes */}
+      <Routes>
+        <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
+        <Route 
+          path="/profile" 
+          element={isLoggedIn ? <UserProfile user={user} /> : <Navigate to="/login" />} 
+        />
+        <Route
+         path="/login" 
+        element={<Login onLogin={handleLogin} />} />
+        <Route
+         path="/events/:id" 
+        element={<EventPage onAddToCart={handleAddToCart} />} />
+        <Route 
+        path="/events/new" 
+        element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
+    
+        <Route path="/cart" element={<Cart cart={cart} />} />
+        <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
+       />
+      </Routes>
+
+    </>
+
   );
 }
-
-
 
 export default App;

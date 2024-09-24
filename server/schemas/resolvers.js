@@ -120,30 +120,26 @@ const resolvers = {
       };
     },
 
-    addToCart: async (_, { eventId, quantity }, context) => {
-      // Example check for user session (if needed)
-      const user = context.user; // Assuming you're using some form of authentication
-      
-      if (!user) throw new Error("User not authenticated");
-    
-      // Find the user or create a new cart
-      const foundUser = await Users.findById(user._id);
-      if (!foundUser) throw new Error("User not found");
-    
-      // Add to cart logic
-      const existingItem = foundUser.cart.find(item => item.eventId.toString() === eventId);
-      if (existingItem) {
-        existingItem.quantity += quantity;
-      } else {
-        foundUser.cart.push({ eventId, quantity });
+    addToCart: async (_, { userId, eventId, quantity }, { User }) => {
+      const user = await Users.findById(userId);
+      if (!user) {
+        throw new Error('User not found');
       }
     
-      await foundUser.save();
-      return foundUser; // Or return the cart
+      const cartItem = user.cart.find(item => item.eventId.toString() === eventId);
+      if (cartItem) {
+        cartItem.quantity += quantity;
+      } else {
+        user.cart.push({ eventId, quantity });
+      }
+    
+      await user.save();
+      return user;
     },
+    
 
-    removeFromCart: async (parent, { userId, eventId }) => {
-      const user = await Users.findById(userId);
+    removeFromCart: async (parent, { _id, eventId, quantity  }) => {
+      const user = await Users.findById(_id);
       if (!user) throw new Error("User not found");
       user.cart = user.cart.filter(
         (id) => _id.toString() !== eventId.toString()
@@ -152,8 +148,8 @@ const resolvers = {
       return user;
     },
 
-    purchaseCart: async (parent, { userId }) => {
-      const user = await Users.findById(userId);
+    purchaseCart: async (parent, { _id }) => {
+      const user = await Users.findById(_id);
       if (!user) throw new Error("User not found");
       const events = await Events.find({ _id: { $in: user.cart } });
       // Update purchaseHistory to include purchaseDate and event URL

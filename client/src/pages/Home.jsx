@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
 
-const Home = ({ user, onLogout }) => {
 
+const Home = ({ user, onLogout }) => {
   const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -71,32 +71,8 @@ const Home = ({ user, onLogout }) => {
     const matchesMinPrice = minPrice ? price >= parseFloat(minPrice) : true;
     const matchesMaxPrice = maxPrice ? price <= parseFloat(maxPrice) : true;
 
-   
-
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
-
-  // // Render events
-  // const renderEvents = (events) => (
-  //   <div className="event-container">
-  //     {events.map((event) => (
-  //       <div key={event.id} className="event-card">
-  //         <a href={event.url} className="event-link">
-  //           <h2>{event.name}</h2>
-  //           <p>{event.description}</p>
-  //           <p>{event.date}</p>
-  //           <p>{event.venue}</p>
-  //           <p>{event.location}</p>
-  //           <p>${event.price.toFixed(2)}</p>
-  //           <p>Tags: {event.tags.join(', ')}</p>
-  //         </a>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
-
-  // Handle search submission
-
 
   return (
     <div className="home">
@@ -109,7 +85,6 @@ const Home = ({ user, onLogout }) => {
           </Link>
         )}
       </div>
-
 
   {/* Search Bar */}
   <div>
@@ -173,22 +148,6 @@ const Home = ({ user, onLogout }) => {
               <p>${event.price.toFixed(2)}</p>
               <p>Tags: {event.tags.join(', ')}</p>
             </a>
-
-            {/* Add Edit Button */}
-            <button
-              className="button"
-              onClick={() => navigate(`/events/edit/${event.id}`)}
-            >
-              Edit
-            </button>
-               {/* Delete Button */}
-            <button
-              className="button"
-              onClick={() => handleDelete(event.id)}
-            >
-              Delete
-            </button>
-
           </div>
         ))}
                   {/* <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button> */}
@@ -196,26 +155,6 @@ const Home = ({ user, onLogout }) => {
       </div>
 
 
-      {/* {user ? (
-        <>
-          <h1>Welcome, {user.username}</h1>
-          <p>Email: {user.email}</p>
-
-          <h2>Upcoming Events</h2>
-          {renderEvents(upcomingEvents)}
-
-          <h2>Past Events</h2>
-          {renderEvents(pastEvents)}
-
-          <h2>Created Events</h2>
-          {renderEvents(createdEventHistory)}
-        </>
-      ) : (
-        <>
-          <h1>Upcoming Events</h1>
-          {renderEvents(filteredEvents)}
-        </>
-      )} */}
     </div>
   );
 };

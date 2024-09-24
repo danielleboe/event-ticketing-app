@@ -6,7 +6,7 @@ const typeDefs = `
     password: String!
     purchaseHistory: [Purchase]
     createdEventHistory: [Event]
-    cart: [Event]
+    cart: [Cart]
     createdAt: String
     updatedAt: String
   }
@@ -18,16 +18,23 @@ type User {
     password: String!
     purchaseHistory: [Purchase]
     createdEventHistory: [Event]
-    cart: [Event]
+    cart: [Cart]
     createdAt: String
     updatedAt: String
   }
+
+type Cart {
+  eventId: ID!
+  quantity: Int!
+}
+
 
 type Purchase {  
     eventId: ID!
     name: String!
     date: String!
-    url: String
+    url: String,
+    quantity: Int!
     purchaseDate: String!
   }
 
@@ -52,6 +59,7 @@ type Purchase {
     updatedAt: String
     url: String
   }
+
   type AuthPayload {
     token: String
     user: User
@@ -127,17 +135,18 @@ type Purchase {
     ): Boolean
 
     addToCart(
-      userId: ID!
-      eventId: ID!
-    ): User
+      userId: ID!, 
+      eventId: ID!, 
+      quantity: Int!
+    ): Users
 
     removeFromCart(
-      userId: ID!
+      id: ID!
       eventId: ID!
     ): User
 
     purchaseCart(
-      userId: ID!
+      id: ID!
     ): User
   }
 `;
