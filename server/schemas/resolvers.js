@@ -1,6 +1,7 @@
 const { Users, Events } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
+const Order = require('./models/Order');
 // const jwt = require("jsonwebtoken");
 
 const resolvers = {
@@ -128,6 +129,20 @@ const resolvers = {
       return user;
     },
 
+    
+
+// After session is completed
+const saveOrder = async (session) => {
+  const order = new Order({
+    userId: session.client_reference_id,
+    items: session.line_items,
+    totalAmount: session.amount_total,
+    paymentStatus: 'Paid',
+  });
+  await order.save();
+};
+,
+
     addEvent: async (_, args) => {
       console.log('Received args:', args);
       try {
@@ -162,6 +177,36 @@ const resolvers = {
         return false;
       }
     },
+    createCheckoutSession: async (_, { cart }, { user }) => {
+      // Create line items from the user's cart
+      const lineItems = cart.map(item => ({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: item.eventName,
+          },
+          unit_amount: item.price * 100, // Price in cents
+        },
+        quantity: item.quantity,
+      }));
+
+      // Create the Stripe checkout session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: lineItems,
+        mode: 'payment',
+        success_url: `${process.env.CLIENT_URL}/success`,
+        cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      });
+
+      return {
+        sessionId: session.id
+      };
+    },
+
+    
+
+
     
 },
 

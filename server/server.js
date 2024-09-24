@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const { typeDefs, resolvers } = require('./schemas'); // Import resolvers
 const path = require('path');
 const db = require('./config/connection');
+
 require('dotenv').config()
 
 const PORT = process.env.PORT || 3001;

@@ -38,9 +38,9 @@ const Navbar = ({ user, onLogout }) => {
         <li>
           <Link to="/profile">Profile</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/settings">Settings</Link>
-        </li>
+        </li> */}
 
         {isLoggedIn ? (
           <li>
