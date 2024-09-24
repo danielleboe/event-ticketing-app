@@ -5,11 +5,33 @@ const mongoose = require('mongoose');
 const { typeDefs, resolvers } = require('./schemas'); // Import resolvers
 const path = require('path');
 const db = require('./config/connection');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const bodyParser = require('body-parser');
+
 require('dotenv').config()
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+//Stripe
+app.use(bodyParser.json());
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { paymentMethodId, amount } = req.body;
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+      payment_method: paymentMethodId,
+      confirm: true,
+    });
+
+    res.send({ success: true, paymentIntent });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
 const startApolloServer = async () => {
   const server = new ApolloServer({ typeDefs, resolvers }); // Moved server initialization before calling `start()`
   
