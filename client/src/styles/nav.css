@@ -124,7 +124,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color:#000;
+    background-color: #27233A;
+    ;
 }
 
 .navbar .logo a {
@@ -151,8 +152,10 @@
 }
 
 .nav-links a:hover {
-    background-color: #575757;
+    background-color: #EFD9CE;
     border-radius: 5px;
+    text-decoration:none;
+
 }
 
 .nav-toggle {

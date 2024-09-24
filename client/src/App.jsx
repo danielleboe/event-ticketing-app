@@ -8,6 +8,7 @@ import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
 import Navbar from './components/Navbar'; // Capitalize the component name
 import Cart from './pages/Cart'; // Capitalize the component name
+import Footer from './components/Footer'; // Capitalize the component name
 
 import './App.css';
 
@@ -65,6 +66,7 @@ function App() {
         <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
        />
       </Routes>
+      <Footer/>
 
     </>
   );
