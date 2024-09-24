@@ -186,10 +186,6 @@ type Order {
   }
 
 
-type PaymentIntent {
-  clientSecret: String!
-}
-
 type Mutation {
   createPaymentIntent(
   amount: Int!
