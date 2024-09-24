@@ -166,19 +166,19 @@ const resolvers = {
       return user;
     },
 
-    createPaymentIntent: async (_, { amount }, context) => {
-      try {
-        const paymentIntent = await stripe.paymentIntents.create({
-          amount, // amount in cents
-          currency: 'usd',
-        });
-        return {
-          clientSecret: paymentIntent.client_secret,
-        };
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
+    // createPaymentIntent: async (_, { amount }, context) => {
+    //   try {
+    //     const paymentIntent = await stripe.paymentIntents.create({
+    //       amount, // amount in cents
+    //       currency: 'usd',
+    //     });
+    //     return {
+    //       clientSecret: paymentIntent.client_secret,
+    //     };
+    //   } catch (error) {
+    //     throw new Error(error.message);
+    //   }
+    // },
 
 // After session is completed
 saveOrder: async (_, { orderInput }) => {
