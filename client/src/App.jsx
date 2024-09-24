@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
+
 import Navbar from './components/Navbar'; // Capitalize the component name
 import Cart from './pages/Cart'; // Capitalize the component name
 import Footer from './components/Footer'; // Capitalize the component name
@@ -15,6 +16,7 @@ import './App.css';
 function App() {
   const [user, setUser] = useState(null); // User state
   const [cart, setCart] = useState([]);
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -41,6 +43,7 @@ function App() {
 
 
   return (
+
     <>
       {/* Navbar outside the Routes to appear on all pages */}
       <Navbar user={user} onLogout={handleLogout} />
@@ -70,6 +73,7 @@ function App() {
       <Footer/>
 
     </>
+
   );
 }
 

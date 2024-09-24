@@ -18,6 +18,22 @@ const usersSchema = new Schema(
       unique: true,
       match: [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, "Invalid Email!  Please enter a valid email."], 
     },
+    cart: [
+      {
+        eventId: {
+          type: Schema.Types.ObjectId,
+          ref: 'Events',
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     password: {
       type: String,
       required: true
@@ -34,18 +50,6 @@ const usersSchema = new Schema(
         ref: 'Events'
       }
     ],
-    cart: [
-      {
-        eventId: {
-          type: Schema.Types.ObjectId,
-          ref: 'Event',  // Assuming you have an Event model
-        },
-        quantity: {
-          type: Number,
-          default: 1,   // Default quantity is 1
-        },
-      },
-    ]
   },
   {
     timestamps: true,
