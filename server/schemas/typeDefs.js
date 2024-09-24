@@ -152,12 +152,56 @@ input CartInput {
   quantity: Int!
 }
 
-type CheckoutSession {
-  sessionId: String!
+input OrderInput {
+  userId: ID!
+  items: [CartInput]!
+  totalAmount: Float!
+  paymentStatus: String!
+}
+
+type Order {
+  id: ID!
+  userId: ID!
+  items: [CartItem]!
+  totalAmount: Float!
+  paymentStatus: String!
+}
+
+ input CartItemInput {
+    price: String!
+    quantity: Int!
+  }
+
+  type CheckoutSession {
+    sessionId: String!
+  }
+
+type CartItem {
+  eventId: ID!
+  eventName: String!
+  price: Float!
+  quantity: Int!
+}
+
+type PaymentIntent {
+  clientSecret: String!
+}
+
+type Mutation {
+  createPaymentIntent(
+  amount: Int!
+  ): PaymentIntent!
+}
+  
+type Mutation {
+  saveOrder(
+  orderInput: OrderInput!
+  ): Order
 }
 
 
-
 `;
+
+
 
 module.exports = typeDefs;

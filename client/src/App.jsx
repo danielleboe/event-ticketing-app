@@ -9,7 +9,7 @@ import EventForm from './pages/EventForm';
 import Navbar from './components/Navbar'; // Capitalize the component name
 import Cart from './pages/Cart'; // Capitalize the component name
 import Footer from './components/Footer'; // Capitalize the component name
-
+import Checkout from './pages/Checkout';
 import './App.css';
 
 function App() {
@@ -61,10 +61,11 @@ function App() {
         <Route 
         path="/events/new" 
         element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
-    
-        <Route path="/cart" element={<Cart cart={cart} />} />
-        <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
+      <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
        />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/cart" element={<Cart cart={cart} />} />
+      
       </Routes>
       <Footer/>
 

@@ -7,6 +7,7 @@ const path = require('path');
 const db = require('./config/connection');
 
 require('dotenv').config()
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const PORT = process.env.PORT || 3001;
 const app = express();
