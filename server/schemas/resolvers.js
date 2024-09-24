@@ -166,6 +166,23 @@ const resolvers = {
       return user;
     },
 
+<<<<<<< HEAD
+=======
+    // createPaymentIntent: async (_, { amount }, context) => {
+    //   try {
+    //     const paymentIntent = await stripe.paymentIntents.create({
+    //       amount, // amount in cents
+    //       currency: 'usd',
+    //     });
+    //     return {
+    //       clientSecret: paymentIntent.client_secret,
+    //     };
+    //   } catch (error) {
+    //     throw new Error(error.message);
+    //   }
+    // },
+
+>>>>>>> fe27813 (env update)
 // After session is completed
 saveOrder: async (_, { orderInput }) => {
   // Destructure the values you need from orderInput
