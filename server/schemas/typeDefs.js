@@ -148,7 +148,25 @@ type Purchase {
     purchaseCart(
       id: ID!
     ): User
+
   }
+
+type Mutation {
+  createCheckoutSession(cart: [CartInput!]!): CheckoutSession!
+}
+
+input CartInput {
+  eventName: String!
+  price: Float!
+  quantity: Int!
+}
+
+type CheckoutSession {
+  sessionId: String!
+}
+
+
+
 `;
 
 module.exports = typeDefs;
