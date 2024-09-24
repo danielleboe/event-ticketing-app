@@ -111,7 +111,22 @@ export const UPDATE_EVENT = gql`
   }
 `;
 
-
+//Cart & Purchase
+export const UPDATE_CART_ITEM_QUANTITY = gql`
+  mutation UpdateCartItemQuantity($userId: ID!, $eventId: ID!, $quantity: Int!) {
+    updateCartItemQuantity(userId: $userId, eventId: $eventId, quantity: $quantity) {
+      cart {
+        eventId {
+          id
+          name
+          url
+        }
+        quantity
+        price
+      }
+}
+}
+`
 // Mutation to delete an event
 export const DELETE_EVENT = gql`
   mutation DeleteEvent($id: ID!) {
@@ -133,4 +148,35 @@ mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
 }
 `;
 
+export const REMOVE_CART_ITEM = gql`
+  mutation RemoveCartItem($userId: ID!, $eventId: ID!) {
+    removeCartItem(userId: $userId, eventId: $eventId) {
+      cart {
+        eventId {
+          id
+          name
+          url
+        }
+        quantity
+        price
+      }
+    }
+  }
+`;
 
+// export const ADD_TO_CART = gql`
+//   mutation AddToCart($userId: ID!, $eventId: ID!, $quantity: Int!) {
+//     addToCart(userId: $userId, eventId: $eventId, quantity: $quantity) {
+//       cart {
+//         eventId {
+//           id
+//           name
+//           price
+//           url
+//         }
+//         quantity
+//         price
+//       }
+//     }
+//   }
+// `;
