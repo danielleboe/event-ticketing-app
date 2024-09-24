@@ -31,6 +31,12 @@ type Purchase {
     purchaseDate: String!
   }
 
+  type CartItem {
+  eventId: Event!
+  quantity: Int!
+  price: Float!
+  }
+
  type Event {
     id: ID!
     name: String!
@@ -67,6 +73,9 @@ type Purchase {
   type Query {
     users: [User]
     user(id: ID!): User
+     events: [Event]
+    event(id: ID!): Event
+    userCart(id: ID!): [CartItem]
   }
 
 
@@ -115,7 +124,7 @@ type Purchase {
 
     deleteEvent(
       id: ID!
-    ): Event
+    ): Boolean
 
     addToCart(
       userId: ID!

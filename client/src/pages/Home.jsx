@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
 
-
 const Home = ({ user, onLogout }) => {
+
   const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -30,6 +30,19 @@ const Home = ({ user, onLogout }) => {
   // });
 
   // Fetch events
+
+  const handleDelete = async (eventId) => {
+    try {
+      const { data } = await deleteEvent({ variables: { id: eventId } });
+      if (data.deleteEvent) {
+        console.log("Event deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error deleting event:", err);
+    }
+  };
+  
+ 
 
 
   // // Handle loading and error states
@@ -57,6 +70,8 @@ const Home = ({ user, onLogout }) => {
     const price = event.price;
     const matchesMinPrice = minPrice ? price >= parseFloat(minPrice) : true;
     const matchesMaxPrice = maxPrice ? price <= parseFloat(maxPrice) : true;
+
+   
 
     return matchesSearch && matchesDate && matchesMinPrice && matchesMaxPrice;
   });
@@ -94,6 +109,7 @@ const Home = ({ user, onLogout }) => {
           </Link>
         )}
       </div>
+
 
   {/* Search Bar */}
   <div>
@@ -157,8 +173,26 @@ const Home = ({ user, onLogout }) => {
               <p>${event.price.toFixed(2)}</p>
               <p>Tags: {event.tags.join(', ')}</p>
             </a>
+
+            {/* Add Edit Button */}
+            <button
+              className="button"
+              onClick={() => navigate(`/events/edit/${event.id}`)}
+            >
+              Edit
+            </button>
+               {/* Delete Button */}
+            <button
+              className="button"
+              onClick={() => handleDelete(event.id)}
+            >
+              Delete
+            </button>
+
           </div>
         ))}
+                  {/* <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button> */}
+
       </div>
 
 
