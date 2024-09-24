@@ -6,10 +6,7 @@
     "quantity": "",
     "price": "",
     "totalAmount": "",
-    "paymentStatus": "",
-    "paymentIntentId": "",
-    "createdAt": "",
-    "updatedAt": ""
+    "paymentStatus": ""
   },
   {
     "user": "",
@@ -18,10 +15,7 @@
     "quantity": "",
     "price": "",
     "totalAmount": "",
-    "paymentStatus": "",
-    "paymentIntentId": "",
-    "createdAt": "",
-    "updatedAt": ""
+    "paymentStatus": ""
   },
   {
     "user": "",
@@ -30,9 +24,6 @@
     "quantity": "",
     "price": "",
     "totalAmount": "",
-    "paymentStatus": "",
-    "paymentIntentId": "",
-    "createdAt": "",
-    "updatedAt": ""
+    "paymentStatus": ""
   }
 ]

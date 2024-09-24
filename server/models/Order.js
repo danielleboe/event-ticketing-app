@@ -33,19 +33,14 @@ const orderSchema = new Schema({
     enum: ["pending", "paid", "failed"],
     default: "pending",
   },
-  paymentIntentId: {
-    type: String, // Stripe payment intent ID for tracking
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+
+},
+{
+  timestamps: true,
+}
+
+
+);
 
 const Order = mongoose.model("Order", orderSchema);
 

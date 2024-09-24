@@ -17,7 +17,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
-  const fetchUser = async (token) => {
+  const fetchUser = async (authToken) => {
     // Mock user data
     return new Promise((resolve) => {
       setTimeout(() => {

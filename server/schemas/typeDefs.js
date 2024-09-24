@@ -186,11 +186,6 @@ type Order {
   }
 
 
-type Mutation {
-  createPaymentIntent(
-  amount: Int!
-  ): PaymentIntent!
-}
   
 type Mutation {
   saveOrder(
