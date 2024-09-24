@@ -1,6 +1,7 @@
 const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
 
 const resolvers = {
   Query: {
@@ -165,19 +166,26 @@ const resolvers = {
       return user;
     },
 
-    
-
 // After session is completed
-const saveOrder = async (session) => {
+saveOrder: async (_, { orderInput }) => {
+  // Destructure the values you need from orderInput
+  const { userId, items, totalAmount } = orderInput;
+
+  // Create a new order object
   const order = new Order({
-    userId: session.client_reference_id,
-    items: session.line_items,
-    totalAmount: session.amount_total,
+    userId,
+    items,
+    totalAmount,
     paymentStatus: 'Paid',
   });
+
+  // Save the order to the database
   await order.save();
-};
-,
+
+  return order; // Optionally return the saved order
+},
+
+
 
     addEvent: async (_, args) => {
       console.log('Received args:', args);
@@ -215,7 +223,7 @@ const saveOrder = async (session) => {
     },
     createCheckoutSession: async (_, { cart }, { user }) => {
       // Create line items from the user's cart
-      const lineItems = cart.map(item => ({
+      const cartItems = cart.map(item => ({
         price_data: {
           currency: 'usd',
           product_data: {
@@ -229,10 +237,10 @@ const saveOrder = async (session) => {
       // Create the Stripe checkout session
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: lineItems,
+        cart_items: cartItems,
         mode: 'payment',
-        success_url: `${process.env.CLIENT_URL}/success`,
-        cancel_url: `${process.env.CLIENT_URL}/cancel`,
+        success_url: `http://localhost:3000/confirmation`,
+        cancel_url: `http://localhost:3000/cancel`,
       });
 
       return {

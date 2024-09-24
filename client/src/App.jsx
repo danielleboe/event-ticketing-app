@@ -1,37 +1,61 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
-import UserProfile from './components/UserProfile'; // Import the UserProfile component
+import UserProfile from './components/UserProfile';
 import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
-
-import Navbar from './components/Navbar'; // Capitalize the component name
-import Cart from './pages/Cart'; // Capitalize the component name
-import Footer from './components/Footer'; // Capitalize the component name
-
+import Navbar from './components/Navbar';
+import Cart from './pages/Cart';
+import Footer from './components/Footer';
+import Checkout from './pages/Checkout';
 import './App.css';
 
 function App() {
-  const [user, setUser] = useState(null); // User state
+  const [user, setUser] = useState(null);
   const [cart, setCart] = useState([]);
-
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null);
-    sessionStorage.removeItem('authToken'); // clear token on logout
-    sessionStorage.removeItem('userId'); // clear userId on logout
-    navigate('/'); // Redirect to home or a suitable page after logout
+  const fetchUser = async (authToken) => {
+    // Mock user data
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ id: '1', name: 'John Doe' });
+      }, 1000);
+    });
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("authToken");
+    if (token) {
+      fetchUser(token)
+        .then(fetchedUser => {
+          setUser(fetchedUser);
+        })
+        .catch(error => {
+          console.error('Failed to fetch user:', error);
+          navigate("/login");
+        });
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleLogin = (user) => {
     setUser(user);
     console.log('User logged in:', user);
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('userId');
+    navigate('/');
+  };
+
   const isLoggedIn = !!user;
+
   useEffect(() => {
     console.log(isLoggedIn ? 'Logged In' : 'Logged Out');
   }, [isLoggedIn]);
@@ -41,14 +65,9 @@ function App() {
     console.log(`Added ${quantity} tickets for event ${eventId} to cart.`);
   };
 
-
   return (
-
     <>
-      {/* Navbar outside the Routes to appear on all pages */}
       <Navbar user={user} onLogout={handleLogout} />
-      
-      {/* Define your routes */}
       <Routes>
         <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
         <Route 
@@ -64,15 +83,12 @@ function App() {
         <Route 
         path="/events/new" 
         element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
-    
+        <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart cart={cart} />} />
-        <Route path="/events/edit/:id"  element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} 
-       />
       </Routes>
-      <Footer/>
-
+      <Footer />
     </>
-
   );
 }
 

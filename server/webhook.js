@@ -1,26 +1,25 @@
-// server/webhook.js
-const stripe = require('../stripe');
-const express = require('express');
-const router = express.Router();
-
-router.post('/webhook', express.raw({ type: 'application/json' }), (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
+// Server-side: Example of how you can verify the session without a webhook
+router.post('/complete-order', async (req, res) => {
+  const { sessionId } = req.body;
+  
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (session.payment_status === 'paid') {
+      // Save order details in your database
+      const order = new Order({
+        userId: session.client_reference_id,
+        items: session.cart_items,
+        totalAmount: session.amount_total,
+        paymentStatus: 'Paid',
+      });
+      await order.save();
+
+      res.json({ success: true });
+    } else {
+      res.status(400).json({ error: 'Payment not completed' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  // Handle the checkout session completed event
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-
-    // Fulfill the purchase, mark it as completed in the database
-  }
-
-  res.json({ received: true });
 });
-
-module.exports = router;

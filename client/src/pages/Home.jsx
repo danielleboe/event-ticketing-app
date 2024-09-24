@@ -31,16 +31,16 @@ const Home = ({ user, onLogout }) => {
 
   // Fetch events
 
-  const handleDelete = async (eventId) => {
-    try {
-      const { data } = await deleteEvent({ variables: { id: eventId } });
-      if (data.deleteEvent) {
-        console.log("Event deleted successfully");
-      }
-    } catch (err) {
-      console.error("Error deleting event:", err);
-    }
-  };
+  // const handleDelete = async (eventId) => {
+  //   try {
+  //     const { data } = await deleteEvent({ variables: { id: eventId } });
+  //     if (data.deleteEvent) {
+  //       console.log("Event deleted successfully");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error deleting event:", err);
+  //   }
+  // };
   
  
 
