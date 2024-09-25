@@ -1,7 +1,6 @@
-import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_USER_CART } from '../utils/queries';
-import { REMOVE_CART_ITEM } from '../utils/mutations';
+import { REMOVE_CART_ITEM, UPDATE_CART_ITEM_QUANTITY } from '../utils/mutations';
 
 const Cart = ({ userId }) => {
   console.log('Fetching cart for user ID:', userId); // Log user ID
