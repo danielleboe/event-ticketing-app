@@ -1,10 +1,10 @@
 // client/src/components/UserProfile.jsx
 import { useQuery } from '@apollo/client';
 import { GET_USER_PURCHASE_HISTORY } from '../utils/queries';
-import Cart from './Cart';
+import Cart from '../pages/Cart';
 import './UserProfile.css'; // Corrected the path to the CSS file
 
-const Home = ({ user }) => {
+const UserProfile = ({ user }) => {
   const { loading, error, data } = useQuery(GET_USER_PURCHASE_HISTORY, {
     variables: { id: user._id },
   });
@@ -60,4 +60,4 @@ const Home = ({ user }) => {
   );
 };
 
-export default Home;
+export default UserProfile;

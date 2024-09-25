@@ -3,10 +3,10 @@ import { useQuery } from "@apollo/client";
 import { GET_EVENTS } from "../utils/queries"; // Import the necessary queries
 import { useNavigate } from 'react-router-dom';
 import "../styles/Home.css";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 
-const Home = ({ user, onLogout }) => {
+const Home = ({user}) => {
   const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -23,40 +23,6 @@ const Home = ({ user, onLogout }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // // Fetch user purchase history if user is logged in
-  // const { loading: userLoading, error: userError } = useQuery(GET_USER_PURCHASE_HISTORY, {
-  //   variables: { id: user?.id },
-  //   skip: !user,
-  // });
-
-  // Fetch events
-
-  // const handleDelete = async (eventId) => {
-  //   try {
-  //     const { data } = await deleteEvent({ variables: { id: eventId } });
-  //     if (data.deleteEvent) {
-  //       console.log("Event deleted successfully");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error deleting event:", err);
-  //   }
-  // };
-  
- 
-
-
-  // // Handle loading and error states
-  // if (userLoading || eventsLoading) return <p>Loading...</p>;
-  // if (userError || eventsError) return <p>Error: {userError?.message || eventsError?.message}</p>;
-
-  // // Retrieve purchase history and created event history from the user data
-  // const purchaseHistory = userData?.user?.purchaseHistory || [];
-  // const createdEventHistory = userData?.user?.createdEventHistory || [];
-
-  // // Filter upcoming and past events from the user's purchase history
-  // const currentDate = new Date();
-  // const upcomingEvents = purchaseHistory.filter(event => new Date(event.date) > currentDate);
-  // const pastEvents = purchaseHistory.filter(event => new Date(event.date) <= currentDate);
 
   // Filter events based on search, price, and date
   const filteredEvents = data.events.filter((event) => {
@@ -76,7 +42,7 @@ const Home = ({ user, onLogout }) => {
 
   return (
     <div className="home">
-      <div className="auth-buttons">
+      {/* <div className="auth-buttons">
         {user ? (
           <button className="logout-button" onClick={onLogout}>Logout</button>
         ) : (
@@ -84,7 +50,7 @@ const Home = ({ user, onLogout }) => {
             <button className="login-button">Login</button>
           </Link>
         )}
-      </div>
+      </div> */}
 
   {/* Search Bar */}
   <div>

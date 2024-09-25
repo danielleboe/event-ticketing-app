@@ -17,12 +17,12 @@ function App() {
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
-  const fetchUser = async (authToken) => {
+  const fetchUser = async (token) => {
     // Mock user data
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ id: '1', name: 'John Doe' });
-      }, 1000);
+      }, 100000);
     });
   };
 
