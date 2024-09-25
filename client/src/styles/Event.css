@@ -64,6 +64,24 @@ color: #735cdd;
   margin: 10px 10px 10px 20px;
 }
 
+.edit{
+  display:flex;
+  justify-content:right;
+
+}
+
+.editButton{
+  font: inherit;
+  font-size: 0.75em;
+  padding: 0.2em;
+  width:70px;
+  /* font-weight: 500; */
+  background-color: #735cdd;
+  border-radius: 6px;
+  color: #fff;
+  border: 0;
+  margin: 10px;
+}
 
 .tickets{
     margin-top: 40px;

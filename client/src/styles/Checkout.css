@@ -1,0 +1,62 @@
+/* Checkout.css */
+
+/* Container styles */
+.checkout-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 400px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+
+/* Title styles */
+.checkout-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Button styles */
+.checkout-container button {
+    background-color: #6772e5;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-container button:hover {
+    background-color: #5469d4;
+}
+
+/* Button focus styles */
+.checkout-container button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(50, 115, 220, 0.4);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .checkout-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .checkout-container h1 {
+        font-size: 20px;
+    }
+
+    .checkout-container button {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+}

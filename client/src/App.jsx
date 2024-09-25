@@ -3,9 +3,9 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import UserProfile from './components/UserProfile';
 import Login from './pages/Login';
-import EditEventForm from './pages/EditEventForm';
+import EditEvent from './pages/EditEvent';
 import EventPage from './pages/EventPage';
-import EventForm from './pages/EventForm';
+import CreateEvent from './pages/CreateEvent';
 import Navbar from './components/Navbar';
 import Cart from './pages/Cart';
 import Footer from './components/Footer';
@@ -17,12 +17,12 @@ function App() {
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
-  const fetchUser = async (authToken) => {
+  const fetchUser = async (token) => {
     // Mock user data
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ id: '1', name: 'John Doe' });
-      }, 1000);
+      }, 100000);
     });
   };
 
@@ -82,8 +82,9 @@ function App() {
         element={<EventPage onAddToCart={handleAddToCart} />} />
         <Route 
         path="/events/new" 
-        element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
-        <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
+        element={isLoggedIn ? <CreateEvent /> : <Navigate to="/login" />} />
+       <Route path="/events/edit/:id" element={<EditEvent />} />
+
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart cart={cart} />} />
       </Routes>

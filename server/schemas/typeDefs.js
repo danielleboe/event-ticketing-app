@@ -131,8 +131,9 @@ type Purchase {
     ): Event
 
     deleteEvent(
-      id: ID!
-    ): Boolean
+      eventId: ID!
+    ): Event
+    
 
     addToCart(
       userId: ID!, 
@@ -184,8 +185,6 @@ type Order {
   type CheckoutSession {
     sessionId: String!
   }
-
-
   
 type Mutation {
   saveOrder(

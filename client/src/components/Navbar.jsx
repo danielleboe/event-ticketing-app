@@ -34,11 +34,15 @@ const Navbar = ({ user, onLogout }) => {
         <li>
           <Link to="/events/new">Add an Event</Link>
         </li>
+        
         <li>
           <Link to="/">Search</Link>
         </li>
         <li>
           <Link to="/profile">Profile</Link>
+        </li>
+        <li>
+          <Link to="/cart">Cart</Link>
         </li>
         {/* <li>
           <Link to="/settings">Settings</Link>
