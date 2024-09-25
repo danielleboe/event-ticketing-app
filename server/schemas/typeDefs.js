@@ -148,7 +148,54 @@ type Purchase {
     purchaseCart(
       id: ID!
     ): User
+
   }
+
+type Mutation {
+  createCheckoutSession(cart: [CartInput!]!): CheckoutSession!
+}
+
+input CartInput {
+  eventName: String!
+  price: Float!
+  quantity: Int!
+}
+
+input OrderInput {
+  userId: ID!
+  items: [CartInput]!
+  totalAmount: Float!
+  paymentStatus: String!
+}
+
+type Order {
+  id: ID!
+  userId: ID!
+  items: [CartItem]!
+  totalAmount: Float!
+  paymentStatus: String!
+}
+
+ input CartItemInput {
+    price: String!
+    quantity: Int!
+  }
+
+  type CheckoutSession {
+    sessionId: String!
+  }
+
+
+  
+type Mutation {
+  saveOrder(
+  orderInput: OrderInput!
+  ): Order
+}
+
+
 `;
+
+
 
 module.exports = typeDefs;
