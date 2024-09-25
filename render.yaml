@@ -1,0 +1,21 @@
+type: web
+  name: event-ticketing-server
+  env: node
+  plan: free
+  buildCommand: cd server && npm install
+  startCommand: cd server && npm start
+  envVars:
+key: MONGODB_URI
+    value: ${MONGODB_URI}
+key: NODE_ENV
+  value: production
+
+  
+type: web
+  name: event-ticketing-client
+  env: static
+  buildCommand: cd client && npm install && npm run build
+  staticPublishPath: client/dist
+  envVars:
+key: VITE_API_URL
+    value: https://event-ticketing-server.onrender.com/graphql
