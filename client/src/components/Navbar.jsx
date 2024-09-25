@@ -6,8 +6,6 @@ const Navbar = ({ user, onLogout }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
 
-
-
   const handleNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
@@ -17,7 +15,7 @@ const Navbar = ({ user, onLogout }) => {
     onLogout(); // Call onLogout to update parent state
     navigate("/login"); // Redirect to the login page
   };
-  
+
   const isLoggedIn = !!user;
 
   useEffect(() => {
@@ -37,18 +35,20 @@ const Navbar = ({ user, onLogout }) => {
         <li>
           <Link to="/">Search</Link>
         </li>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        {/* <li>
-          <Link to="/settings">Settings</Link>
-        </li> */}
-
-        {isLoggedIn ? (
-          <li>
-            <button onClick={handleLogout}>Logout</button>
-          </li>
-        ) : (
+        {isLoggedIn && user && user._id && (
+          <>
+            <li>
+              <Link to={`/cart/${user._id}`}>View Cart</Link>
+            </li>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+            <li>
+              <button onClick={handleLogout}>Logout</button>
+            </li>
+          </>
+        )}
+        {!isLoggedIn && (
           <li>
             <Link to="/login">Login</Link>
           </li>

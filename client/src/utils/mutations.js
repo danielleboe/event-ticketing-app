@@ -164,3 +164,10 @@ export const REMOVE_CART_ITEM = gql`
   }
 `;
 
+export const CREATE_CHECKOUT_SESSION = gql`
+  mutation CreateCheckoutSession($cart: [CartInput!]!) {
+    createCheckoutSession(cart: $cart) {
+      sessionId
+    }
+  }
+`;

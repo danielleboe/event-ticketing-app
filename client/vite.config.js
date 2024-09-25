@@ -5,6 +5,9 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
+    define: {
+      'process.env': process.env,
+    },
     resolve: {
       alias: {
         'crypto': 'crypto-browserify',

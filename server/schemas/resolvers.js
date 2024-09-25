@@ -41,7 +41,7 @@ const resolvers = {
     },
       // New resolver for fetching user cart data
       userCart: async (_, { id }) => {
-        console.log('Fetching cart for user ID:', id); // Log user ID
+        console.log('Fetching cart for user ID:', _id); // Log user ID
   
         try {
           const user = await Users.findById(id).populate({

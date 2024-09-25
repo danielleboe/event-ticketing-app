@@ -7,7 +7,7 @@ import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
 import EventForm from './pages/EventForm';
 import Navbar from './components/Navbar';
-import Cart from './pages/Cart';
+import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Checkout from './pages/Checkout';
 import './App.css';
@@ -21,7 +21,7 @@ function App() {
     // Mock user data
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ id: '1', name: 'John Doe' });
+        resolve({ _id: '1', name: 'John Doe' });
       }, 1000);
     });
   };
@@ -85,8 +85,8 @@ function App() {
         element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
         <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/cart" element={<Cart cart={cart} />} />
-      </Routes>
+        <Route path="/cart/:userId" element={<Cart user={user} cart={cart} />} />
+        </Routes>
       <Footer />
     </>
   );

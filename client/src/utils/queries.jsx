@@ -105,14 +105,14 @@ export const GET_USER = gql`
       username
       email
       purchaseHistory {
-        id
+        _id
         name
         date
         url
         purchaseDate
       }
       createdEventHistory { 
-        id
+        _id
         name
         date
         url
@@ -127,9 +127,9 @@ export const GET_USER = gql`
 // client/src/utils/queries.js
 export const GET_USER_CART = gql`
   query GetUserCart($id: ID!) {
-    userCart(id: $id) {
+    userCart(_id: $id) {
         eventId {
-          id
+          _id
           name
           url
         }
