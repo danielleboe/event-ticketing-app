@@ -1,0 +1,11 @@
+.cart-container{
+    text-align:center;
+    padding:30px;
+    margin:20px;
+}
+
+.cart-item{
+    list-style-type: none; /* Remove bullets */
+    line-height: 2;
+
+}

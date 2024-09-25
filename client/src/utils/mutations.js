@@ -71,19 +71,31 @@ export const ADD_EVENT = gql`
 
 
 
+
+// // Mutation to delete an event
+export const DELETE_EVENT = gql`
+mutation DeleteEvent($eventId: ID!) {
+  deleteEvent(eventId: $eventId) {
+    id
+  }
+}
+`;
+
+
+
+
 // Mutation to update an existing event
 export const UPDATE_EVENT = gql`
   mutation UpdateEvent(
     $id: ID!
-    $name: String
-    $description: String
-    $venue: String
-    $location: String
-    $eventDate: String
-    $eventTime: String
-    $tags: [String]
-    $price: Float
-    $url: String
+    $name: String!
+    $description: String!
+    $venue: String!
+    $location: String!
+    $eventDate: String!
+    $eventTime: String!
+    $tags: [String]!
+    $price: Float!
   ) {
     updateEvent(
       id: $id
@@ -95,7 +107,6 @@ export const UPDATE_EVENT = gql`
       eventTime: $eventTime
       tags: $tags
       price: $price
-      url: $url
     ) {
       id
       name
@@ -106,7 +117,6 @@ export const UPDATE_EVENT = gql`
       eventTime
       tags
       price
-      url
     }
   }
 `;
@@ -124,15 +134,12 @@ export const UPDATE_CART_ITEM_QUANTITY = gql`
         quantity
         price
       }
-}
-}
-`
-// Mutation to delete an event
-export const DELETE_EVENT = gql`
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
-  }
-`;
+    }
+    }`;
+
+    
+
+
   
 //Cart & Purchase
 

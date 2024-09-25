@@ -1,16 +1,20 @@
 const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+
 // const jwt = require("jsonwebtoken");
+
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
-    user: async (_, { _id }) => {
-      console.log('Fetching user with ID:', _id); // Log user ID
+    user: async (_, { id }) => {
+      console.log('Fetching user with ID:', id); // Log user ID
 
       try {
-        const user = await Users.findById(_id).populate({
+        const user = await Users.findById(id).populate({
           path: 'cart.eventId',
           model: 'Events'
         });
@@ -121,8 +125,8 @@ const resolvers = {
       };
     },
 
-    addToCart: async (_, { userId, eventId, quantity }, { User }) => {
-      const user = await Users.findById(userId);
+    addToCart: async (_, { userId, eventId, quantity, price }) => {
+      const user = await Users.findOneAndUpdate({_id:userId},);
       if (!user) {
         throw new Error('User not found');
       }
@@ -131,7 +135,7 @@ const resolvers = {
       if (cartItem) {
         cartItem.quantity += quantity;
       } else {
-        user.cart.push({ eventId, quantity });
+        user.cart.push({ eventId, quantity, price });
       }
     
       await user.save();
@@ -139,7 +143,7 @@ const resolvers = {
     },
     
 
-    removeFromCart: async (parent, { _id, eventId, quantity  }) => {
+    removeFromCart: async (parent, { _id, eventId, quantity, price  }) => {
       const user = await Users.findById(_id);
       if (!user) throw new Error("User not found");
       user.cart = user.cart.filter(
@@ -212,15 +216,61 @@ saveOrder: async (_, { orderInput }) => {
         throw new Error('Error updating event: ' + err.message);
       }
     },
-    deleteEvent: async (parent, { id }) => {
+
+    
+    // deleteEvent: async (_, { eventId }) => {
+    //   try {
+    //     // Find and delete the event by ID
+    //     const event = await Events.findByIdAndDelete(eventId);
+        
+    //     if (!event) {
+    //       throw new Error('Event not found');
+    //     }
+
+    //     // Remove the event from all users' createdEventHistory (optional)
+    //     await Users.updateMany(
+    //       { createdEventHistory: eventId },
+    //       { $pull: { createdEventHistory: eventId } }
+    //     );
+
+    //     return event;  // Return the deleted event
+    //   } catch (error) {
+    //     console.error('Error in deleteEvent resolver:', error);  // Log the error for debugging
+    //     throw new Error(error.message || 'Error deleting event');
+    //   }
+    // },
+    
+
+    deleteEvent: async (_, { eventId }) => {
+      // Log the ID received for debugging
+      console.log("Attempting to delete event with ID:", eventId);
+    
+      // Validate the event ID format
+      if (!isValidObjectId(eventId)) {
+        throw new Error('Invalid event ID format');
+      }
+    
       try {
-        await Events.findByIdAndDelete(id);
-        return true;
+        // Find and delete the event by ID
+        const event = await Events.findByIdAndDelete(eventId);
+    
+        // Check if the event was found and deleted
+        if (!event) {
+          throw new Error('Event not found');
+        }
+    
+        // Simply return the deleted event
+        return event; 
       } catch (error) {
-        console.error(error);
-        return false;
+        // Log the error for debugging
+        console.error('Error in deleteEvent resolver:', error);
+        throw new Error(error.message || 'Error deleting event');
       }
     },
+    
+    
+    
+
     createCheckoutSession: async (_, { cart }, { user }) => {
       // Create line items from the user's cart
       const cartItems = cart.map(item => ({
@@ -271,6 +321,7 @@ saveOrder: async (_, { orderInput }) => {
       await Events.find({ _id: { $in: user.createdEventHistory } }),
     cart: async (user) => await Events.find({ _id: { $in: user.cart } }),
   },
+
 
   Event: {
     createdBy: async (parent) => await Users.findById(parent.createdBy),  // Use 'parent.createdBy'
