@@ -11,6 +11,7 @@ import Cart from './components/Cart';
 import Footer from './components/Footer';
 import Checkout from './pages/Checkout';
 import './App.css';
+import CartPage from './pages/CartPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -85,7 +86,7 @@ function App() {
         element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
         <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/cart/:userId" element={<Cart user={user} cart={cart} />} />
+        <Route path="/cart" element={isLoggedIn ? <CartPage user={user} cart={cart} /> : <Navigate to="/login" />} />
         </Routes>
       <Footer />
     </>

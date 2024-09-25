@@ -126,15 +126,13 @@ export const GET_USER = gql`
 
 // client/src/utils/queries.js
 export const GET_USER_CART = gql`
-  query GetUserCart($id: ID!) {
-    userCart(_id: $id) {
-        eventId {
-          _id
-          name
-          url
-        }
+  query GetUserCart($userId: ID!) {
+    user(id: $userId) {
+      cart {
+        eventId
         quantity
         price
       }
     }
+  }
 `;

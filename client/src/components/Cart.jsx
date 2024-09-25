@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 import { GET_USER_CART } from '../utils/queries';
 import { REMOVE_CART_ITEM, UPDATE_CART_ITEM_QUANTITY } from '../utils/mutations';
 import { loadStripe } from '@stripe/stripe-js'; 
@@ -11,7 +11,7 @@ const Cart = ({ userId }) => {
 
   const [createCheckoutSession] = useMutation(CREATE_CHECKOUT_SESSION);
   const { loading, error, data } = useQuery(GET_USER_CART, {
-    variables: { id: userId },
+    variables: { userId },
     onCompleted: (data) => {
       console.log('Cart data received:', data);
     },

@@ -35,6 +35,14 @@ const Home = ({ user, onLogout }) => {
     });
   };
 
+  const handleViewCart = () => {
+    if (user && user._id) {
+      navigate(`/cart/${user._id}`);
+    } else {
+      console.error("User ID is undefined");
+    }
+  };
+
   const filteredEvents = data.events.filter((event) => {
     const matchesSearch =
       event.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -52,18 +60,10 @@ const Home = ({ user, onLogout }) => {
 
   return (
     <div className="home">
-      <div className="auth-buttons">
-        {user ? (
-          <button className="logout-button" onClick={onLogout}>Logout</button>
-        ) : (
-          <Link to="/login">
-            <button className="login-button">Login</button>
-          </Link>
-        )}
-      </div>
 
   {/* Search Bar */}
   <div>
+
         <form onSubmit={handleSearch} className="search-container">
           <input
             type="text"
