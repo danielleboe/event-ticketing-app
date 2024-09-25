@@ -12,21 +12,21 @@ const orderSchema = new Schema({
       eventId: {
         type: Schema.Types.ObjectId,
         ref: "Events", // Reference to the Event model
-        required: true,
+        required: false,
       },
       quantity: {
         type: Number,
-        required: true,
+        required: false,
       },
       price: {
         type: Number,
-        required: true, // Price at the time of order
+        required: false, // Price at the time of order
       },
     },
   ],
   totalAmount: {
     type: Number,
-    required: true,
+    required: false,
   },
   paymentStatus: {
     type: String,
