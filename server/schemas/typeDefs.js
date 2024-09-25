@@ -184,8 +184,6 @@ type Order {
   type CheckoutSession {
     sessionId: String!
   }
-
-
   
 type Mutation {
   saveOrder(

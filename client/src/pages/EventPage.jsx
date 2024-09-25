@@ -1,36 +1,27 @@
-import { useState, useMutation } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_EVENT } from '../utils/queries';
 import { useParams } from 'react-router-dom';  
-import { UPDATE_CART_ITEM_QUANTITY } from '../utils/mutations';
+
 import "../styles/Event.css";
 
-const EventPage = () => {
-  const { id: eventId } = useParams();  // Extract eventId from URL params
+const EventPage = ({ onAddToCart }) => {  // Accept onAddToCart as a prop
+  const { id: eventId } = useParams();  
+  const [quantity, setQuantity] = useState(1);
+
   const { loading, error, data } = useQuery(GET_EVENT, {
     variables: { id: eventId },
   });
-  
-  const [quantity, setQuantity] = useState(1);
-  const [addToCart] = useMutation(UPDATE_CART_ITEM_QUANTITY);
-
-  const handleAddToCart = async () => {
-    try {
-      await addToCart({
-        variables: { eventId, quantity },
-      });
-      console.log(`handleaddtocart`, eventId,quantity );
-      alert('Tickets added to cart!');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to add tickets to cart.');
-    }
-  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading event</p>;
 
   const { name, description, venue, location, eventDate, eventTime, tags, price } = data.event;
+
+  const handleAddToCart = () => {
+    // Call the onAddToCart function passed from App.jsx
+    onAddToCart(eventId, parseInt(quantity), price); // Ensure quantity is a number
+  };
 
   return (
     <div className="eventContainer">

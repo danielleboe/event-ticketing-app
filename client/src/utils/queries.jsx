@@ -54,16 +54,15 @@ export const GET_USER_PURCHASE_HISTORY = gql`
   query GetUserPurchaseHistory($id: ID!) {
     user(id: $id) {
       purchaseHistory {
-        id
+        
         name
         date
         url
         purchaseDate
       }
       createdEventHistory {
-        id
         name
-        date
+        eventDate
         url
       }
     }
@@ -137,4 +136,16 @@ export const GET_USER_CART = gql`
         price
       }
     }
+`;
+
+export const GET_CART_ITEMS = gql`
+  query GetCartItems($id: ID!) {
+    cart(userId: $id) {
+      items {
+        eventId
+        price
+        quantity
+      }
+    }
+  }
 `;

@@ -5,7 +5,7 @@ import UserProfile from './components/UserProfile';
 import Login from './pages/Login';
 import EditEventForm from './pages/EditEventForm';
 import EventPage from './pages/EventPage';
-import EventForm from './pages/EventForm';
+import CreateEvent from './pages/CreateEvent';
 import Navbar from './components/Navbar';
 import Cart from './pages/Cart';
 import Footer from './components/Footer';
@@ -82,7 +82,7 @@ function App() {
         element={<EventPage onAddToCart={handleAddToCart} />} />
         <Route 
         path="/events/new" 
-        element={isLoggedIn ? <EventForm /> : <Navigate to="/login" />} />
+        element={isLoggedIn ? <CreateEvent /> : <Navigate to="/login" />} />
         <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart cart={cart} />} />

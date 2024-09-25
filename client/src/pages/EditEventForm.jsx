@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import EventForm from './EventForm';
+import EventForm from '../components/EventForm';
 
 const EditEventForm = () => {
   const { id } = useParams(); // Get the event ID from the URL

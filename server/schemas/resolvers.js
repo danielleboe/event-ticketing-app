@@ -6,11 +6,11 @@ const bcrypt = require("bcrypt");
 const resolvers = {
   Query: {
     users: async () => await Users.find(),
-    user: async (_, { _id }) => {
-      console.log('Fetching user with ID:', _id); // Log user ID
+    user: async (_, { id }) => {
+      console.log('Fetching user with ID:', id); // Log user ID
 
       try {
-        const user = await Users.findById(_id).populate({
+        const user = await Users.findById(id).populate({
           path: 'cart.eventId',
           model: 'Events'
         });
@@ -121,8 +121,8 @@ const resolvers = {
       };
     },
 
-    addToCart: async (_, { userId, eventId, quantity }, { User }) => {
-      const user = await Users.findById(userId);
+    addToCart: async (_, { userId, eventId, quantity, price }) => {
+      const user = await Users.findOneAndUpdate({_id:userId},);
       if (!user) {
         throw new Error('User not found');
       }
@@ -131,7 +131,7 @@ const resolvers = {
       if (cartItem) {
         cartItem.quantity += quantity;
       } else {
-        user.cart.push({ eventId, quantity });
+        user.cart.push({ eventId, quantity, price });
       }
     
       await user.save();
@@ -139,7 +139,7 @@ const resolvers = {
     },
     
 
-    removeFromCart: async (parent, { _id, eventId, quantity  }) => {
+    removeFromCart: async (parent, { _id, eventId, quantity, price  }) => {
       const user = await Users.findById(_id);
       if (!user) throw new Error("User not found");
       user.cart = user.cart.filter(
