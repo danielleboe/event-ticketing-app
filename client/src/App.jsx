@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import UserProfile from './components/UserProfile';
 import Login from './pages/Login';
-import EditEventForm from './pages/EditEventForm';
+import EditEvent from './pages/EditEvent';
 import EventPage from './pages/EventPage';
 import CreateEvent from './pages/CreateEvent';
 import Navbar from './components/Navbar';
@@ -83,7 +83,8 @@ function App() {
         <Route 
         path="/events/new" 
         element={isLoggedIn ? <CreateEvent /> : <Navigate to="/login" />} />
-        <Route path="/events/edit/:id" element={isLoggedIn ? <EditEventForm /> : <Navigate to="/login" />} />
+       <Route path="/events/edit/:id" element={<EditEvent />} />
+
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart cart={cart} />} />
       </Routes>

@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { useMutation } from "@apollo/client";
-import { useParams } from "react-router-dom"; 
+import { useState, useEffect } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { useParams, useNavigate } from "react-router-dom"; 
 import "../styles/EventCreate.css";
-import { ADD_EVENT } from "../utils/mutations";
-// import { GET_EVENT } from "../utils/queries";
+import { ADD_EVENT, UPDATE_EVENT, DELETE_EVENT } from "../utils/mutations";
+import { GET_EVENT } from "../utils/queries";
 
-const CreateEvent = () => {
-  // const { eventId } = useParams(); // Extract eventId from URL
-    const { eventId } = useParams(); // Extract eventId from URL
-//   const [newEventId, setNewEventId] = useState(null); // New state to store the created event ID
+const EditEvent = () => {
+  const { eventId } = useParams(); // Extract eventId from URL
+  const navigate = useNavigate(); // Initialize the navigate function
   const [eventData, setEventData] = useState({
-    id: null,
+    id: "",
     name: "",
     description: "",
     venue: "",
@@ -20,48 +19,70 @@ const CreateEvent = () => {
     tags: [],
     price: 0,
   });
-//   const navigate = useNavigate(); // Initialize the navigate function
 
   const [addEvent] = useMutation(ADD_EVENT);
-//   const [updateEvent] = useMutation(UPDATE_EVENT);
-//   const [deleteEvent] = useMutation(DELETE_EVENT);
-console.log(`eventId`, eventId);
-//   // Fetch existing event data if editing
-//   const { data } = useQuery(GET_EVENT, {
-//     variables: { id: eventId },
-//     skip: !eventId,
-//   });
+  const [updateEvent] = useMutation(UPDATE_EVENT);
+  const [deleteEvent] = useMutation(DELETE_EVENT);
 
-//   // Update the form data when event data is fetched
-//   useEffect(() => {
-//     if (data?.event) {
-//       setEventData(data.event);
-//     }
-//   }, [data]);
+  // Fetch existing event data if editing
+  const { data, loading, error } = useQuery(GET_EVENT, {
+    variables: { id: eventId },
+    skip: !eventId,
+  });
+
+  // Update the form data when event data is fetched
+  useEffect(() => {
+    if (data?.event) {
+        console.log("Fetched Data:", data); // Check what data is being fetched
+      setEventData({
+        id: data.event.id, // Set the ID to the state
+        name: data.event.name,
+        description: data.event.description,
+        venue: data.event.venue,
+        location: data.event.location,
+        eventDate: data.event.eventDate,
+        eventTime: data.event.eventTime,
+        tags: data.event.tags || [],
+        price: data.event.price,
+      });
+
+    }
+  }, [data]);
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Parse price to float for better handling of numeric values
-    const parsedValue = name === "price" ? parseFloat(value) : value;
-
     setEventData((prev) => ({
       ...prev,
-      [name]: parsedValue,
+      [name]: name === "tags" ? value.split(",").map((tag) => tag.trim()) : value,
     }));
   };
 
-
-  //debugging code - temp
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`eventid`, eventId);
-    console.log(`eventdata`, eventData);
   
     try {
+      let response;
+
+      if (eventId) {
+        // Update the existing event
+        response = await updateEvent({
+          variables: { 
+            id: eventData.id,
+            name: eventData.name,
+            description: eventData.description,
+            venue: eventData.venue,
+            location: eventData.location,
+            eventDate: eventData.eventDate,
+            eventTime: eventData.eventTime,
+            tags: eventData.tags,
+            price: eventData.price
+          }
+        });
+      } else {
         // Create a new event
-        let response = await addEvent({
+        response = await addEvent({
           variables: { 
             name: eventData.name,
             description: eventData.description,
@@ -72,33 +93,44 @@ console.log(`eventId`, eventId);
             tags: eventData.tags,
             price: eventData.price
           }
-    })
-        console.log(`data!!!!!!!`, response.data?.addEvent?.id);
+        });
+      }
 
-        window.location.assign(`/events/${response.data?.addEvent?.id}`);
-  
-    //     // Get the new event ID
-    //     const createdEventId = response.data?.addEvent?.id;
-    //     setNewEventId(createdEventId);
-    //   }
-    }
-  catch (error) {
+      console.log(response.data);
+      navigate(`/events/${response.data?.addEvent?.id || response.data?.addEvent?.id}`); // Redirect to the event page
+    } catch (error) {
       console.error("Error saving event:", error);
     }
   };
-  
- 
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      try {
+        await deleteEvent({
+          variables: { id: eventId },
+        });
+        navigate('/events'); // Redirect after deletion
+      } catch (error) {
+        console.error("Error deleting event:", error);
+      }
+    }
+  };
+
+  if (loading) return <p>Loading...</p>; // Loading state
+  if (error) return <p>Error loading event data: {error.message}</p>; // Error handling
+
   return (
     <section className="event-form-container">
-      <h1>Create Event</h1>
+      <h1>Edit Event</h1>
       <form id="eventForm" onSubmit={handleSubmit}>
+        {/* Input fields */}
         <div className="input">
           <input
             className="input-field"
             id="nameInput"
             name="name"
             placeholder="  Event Name"
-            value={eventData.name || ""}
+            value={eventData.name || ""} // Use eventData.name for input value
             onChange={handleChange}
             required
           />
@@ -111,7 +143,7 @@ console.log(`eventId`, eventId);
             id="descriptionInput"
             name="description"
             placeholder="  Description"
-            value={eventData.description || ""}
+            value={eventData.description || ""} // Use eventData.description for input value
             onChange={handleChange}
             required
           />
@@ -124,7 +156,7 @@ console.log(`eventId`, eventId);
             id="venueInput"
             name="venue"
             placeholder="  Venue"
-            value={eventData.venue || ""}
+            value={eventData.venue || ""} // Use eventData.venue for input value
             onChange={handleChange}
             required
           />
@@ -137,7 +169,7 @@ console.log(`eventId`, eventId);
             id="locationInput"
             name="location"
             placeholder="  Address"
-            value={eventData.location || ""}
+            value={eventData.location || ""} // Use eventData.location for input value
             onChange={handleChange}
             required
           />
@@ -151,7 +183,7 @@ console.log(`eventId`, eventId);
             type="date"
             name="eventDate"
             placeholder="  Event Date"
-            value={eventData.eventDate || ""}
+            value={eventData.eventDate || ""} // Use eventData.eventDate for input value
             onChange={handleChange}
             required
           />
@@ -165,7 +197,7 @@ console.log(`eventId`, eventId);
             type="time"
             name="eventTime"
             placeholder="  Event Time"
-            value={eventData.eventTime || ""}
+            value={eventData.eventTime || ""} // Use eventData.eventTime for input value
             onChange={handleChange}
             required
           />
@@ -178,13 +210,8 @@ console.log(`eventId`, eventId);
             id="tagInput"
             name="tags"
             placeholder="  Tags"
-            value={eventData.tags.join(", ") || ""}
-            onChange={(e) =>
-              setEventData((prev) => ({
-                ...prev,
-                tags: e.target.value.split(",").map((tag) => tag.trim()),
-              }))
-            }
+            value={eventData.tags.join(", ") || ""} // Join tags for input value
+            onChange={handleChange}
           />
           <label className="input-label">Tags (comma separated): </label>
         </div>
@@ -196,7 +223,7 @@ console.log(`eventId`, eventId);
             type="number"
             name="price"
             placeholder="  Price"
-            value={eventData.price || ""}
+            value={eventData.price || ""} // Use eventData.price for input value
             onChange={handleChange}
             required
           />
@@ -204,13 +231,18 @@ console.log(`eventId`, eventId);
         </div>
         <br />
         <br />
-
+      <div className="buttons">
         <button className="button" id="saveButton" type="submit">
-          Save Event
+          {eventId ? "Update Event" : "Save Event"}
         </button>
+       
+          <button className="button" id="deleteButton" type="button" onClick={handleDelete}>
+            Delete Event
+          </button>
+          </div>
       </form>
     </section>
   );
 };
 
-export default CreateEvent;
+export default EditEvent;

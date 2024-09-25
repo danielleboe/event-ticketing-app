@@ -137,16 +137,3 @@ export const GET_USER_CART = gql`
       }
     }
 `;
-
-export const GET_CART_ITEMS = gql`
-  query GetCartItems($id: ID!) {
-    cart(userId: $id) {
-      items {
-        eventId
-        price
-        quantity
-              }
-    }
-  }
-`;
-

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_EVENT } from '../utils/queries';
-import { useParams } from 'react-router-dom';  
+import { useParams, useNavigate } from 'react-router-dom';  
 
 import "../styles/Event.css";
 
 const EventPage = ({ onAddToCart }) => {  // Accept onAddToCart as a prop
+  const navigate = useNavigate();
   const { id: eventId } = useParams();  
   const [quantity, setQuantity] = useState(1);
 
@@ -18,15 +19,24 @@ const EventPage = ({ onAddToCart }) => {  // Accept onAddToCart as a prop
 
   const { name, description, venue, location, eventDate, eventTime, tags, price } = data.event;
 
+ 
+  const handleEditEvent = () => {
+    navigate('/edit/:id'); // Replace with the correct path for your edit page
+  };
+
   const handleAddToCart = () => {
     // Call the onAddToCart function passed from App.jsx
     onAddToCart(eventId, parseInt(quantity), price); // Ensure quantity is a number
   };
 
+
+
+
   return (
     <div className="eventContainer">
       <div className="event-page">
         <h1>{name}</h1>
+        <button className="button" onClick={handleEditEvent}>Edit Event</button>
         <p>{description}</p>
         <p><strong>Venue:</strong> {venue}</p>
         <p><strong>Address:</strong> {location}</p>

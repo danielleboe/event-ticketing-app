@@ -6,7 +6,7 @@ import "../styles/Home.css";
 // import { Link } from "react-router-dom";
 
 
-const Home = ({user}) => {
+const Home = () => {
   const { loading, error, data } = useQuery(GET_EVENTS); // Fetch events using GraphQL query
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
