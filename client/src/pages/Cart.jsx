@@ -1,30 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { GET_CART_ITEMS } from '../utils/queries';
 import CheckoutModal from '../components/CheckoutModal';
+import '../styles/Cart.css';
 
-const Cart = ({ userId, onPurchase }) => {
+
+const Cart = ({ cart, onPurchase }) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch cart items using GraphQL
-  const { loading, error, data } = useQuery(GET_CART_ITEMS, {
-    variables: { id: userId },
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  // Get cart items from the fetched data, ensuring fallback for undefined
-  const cartItems = data?.cart?.items || [];
-
-  // Calculate subtotal, taxes, and total
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const taxes = subtotal * 0.1; // Assuming a 10% tax rate
+  const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const taxes = subtotal * 0.1; // Assuming 10% tax rate
   const total = subtotal + taxes;
 
-  // Handle purchase process
   const handlePurchase = () => {
     setIsModalOpen(true);
   };
@@ -33,34 +20,35 @@ const Cart = ({ userId, onPurchase }) => {
     // Process the purchase here (e.g., send paymentMethod to your server)
     await onPurchase(paymentMethod);
     setIsModalOpen(false);
-    navigate('/order-confirmation');
+    navigate('/confirmation');
   };
 
   return (
-    <div>
-      <h1>Your Cart</h1>
-      {cartItems.length === 0 ? (
+    <div className="cart-container">
+      <h1 className="headline">Your Cart</h1>
+      {cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul>
-          {cartItems.map((item, index) => (
+        <ul className="cart-item">
+          {cart.map((item, index) => (
             <li key={index}>
-              Event ID: {item.eventId}, Quantity: {item.quantity}
+            
+              Event ID: {item.eventId} <br /> Quantity: {item.quantity}
             </li>
           ))}
         </ul>
       )}
-      {cartItems.length > 0 && (
-        <button onClick={handlePurchase}>Purchase</button>
+      {cart.length > 0 && (
+        <button className="button" onClick={handlePurchase}>Purchase</button>
       )}
       <CheckoutModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        cart={cartItems}
-        subtotal={subtotal}
-        taxes={taxes}
-        total={total}
-        onConfirm={handleConfirmPurchase}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          cart={cart}
+          subtotal={subtotal}
+          taxes={taxes}
+          total={total}
+          onConfirm={handleConfirmPurchase}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import { ADD_EVENT } from "../utils/mutations";
 const EventForm = () => {
   // const { eventId } = useParams(); // Extract eventId from URL
     const { eventId } = useParams(); // Extract eventId from URL
-  const [newEventId, setNewEventId] = useState(null); // New state to store the created event ID
+//   const [newEventId, setNewEventId] = useState(null); // New state to store the created event ID
   const [eventData, setEventData] = useState({
     id: null,
     name: "",

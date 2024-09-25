@@ -145,7 +145,8 @@ export const GET_CART_ITEMS = gql`
         eventId
         price
         quantity
-      }
+              }
     }
   }
 `;
+
