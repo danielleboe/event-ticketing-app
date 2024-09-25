@@ -125,12 +125,16 @@ export const UPDATE_CART_ITEM_QUANTITY = gql`
     }`;
 
     
-// Mutation to delete an event
+// // Mutation to delete an event
 export const DELETE_EVENT = gql`
-  mutation DeleteEvent($id: ID!) {
-    deleteEvent(id: $id)
+ mutation DeleteEvent($eventId: ID!) {
+    deleteEvent(eventId: $eventId) {
+      id
+    }
   }
 `;
+
+
   
 //Cart & Purchase
 

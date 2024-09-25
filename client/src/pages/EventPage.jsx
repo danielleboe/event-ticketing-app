@@ -21,7 +21,7 @@ const EventPage = ({ onAddToCart }) => {  // Accept onAddToCart as a prop
 
  
   const handleEditEvent = () => {
-    navigate('/edit/:id'); // Replace with the correct path for your edit page
+    navigate(`/events/edit/${eventId}`); // Use backticks for template literals
   };
 
   const handleAddToCart = () => {

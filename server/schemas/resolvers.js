@@ -1,6 +1,8 @@
 const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
+const { AuthenticationError } = require('apollo-server-express');
+
 // const jwt = require("jsonwebtoken");
 
 const resolvers = {
@@ -212,15 +214,65 @@ saveOrder: async (_, { orderInput }) => {
         throw new Error('Error updating event: ' + err.message);
       }
     },
-    deleteEvent: async (parent, { id }) => {
+
+    
+    deleteEvent: async (_, { eventId }, { models }) => {
       try {
-        await Events.findByIdAndDelete(id);
-        return true;
+        // Find the event by ID and delete it
+        const deletedEvent = await models.Events.findByIdAndDelete(eventId);
+        
+        if (!deletedEvent) {
+          throw new Error('Event not found');
+        }
+
+        // Remove the event from all users' createdEventHistory (optional)
+        await Users.updateMany(
+          { createdEventHistory: eventId },
+          { $pull: { createdEventHistory: eventId } }
+        );
+
+        return event;
       } catch (error) {
-        console.error(error);
-        return false;
+        throw new Error('Error deleting event');
       }
     },
+
+
+    deleteEvent: async (_, { eventId }, { models }) => {
+      // Logic to delete the event using eventId
+      const deletedEvent = await models.Event.findByIdAndRemove(eventId);
+      return deletedEvent;
+    },
+    
+    // deleteEvent: async (_, { eventId }, context) => {
+    //   if (!context.user) {
+    //     throw new AuthenticationError('You must be logged in to delete an event');
+    //   }
+
+    //   try {
+    //     // Find the event by ID and delete it
+    //     const event = await Event.findByIdAndDelete(eventId);
+        
+    //     if (!event) {
+    //       throw new Error('Event not found');
+    //     }
+
+    //     // Remove the event from the user's createdEventHistory
+    //     await User.findByIdAndUpdate(
+    //       context.user._id,
+    //       { $pull: { createdEventHistory: eventId } },
+    //       { new: true }
+    //     );
+
+    //     return event;
+    //   } catch (error) {
+    //     throw new Error('Error deleting event');
+    //   }
+    // },
+
+
+
+
     createCheckoutSession: async (_, { cart }, { user }) => {
       // Create line items from the user's cart
       const cartItems = cart.map(item => ({
