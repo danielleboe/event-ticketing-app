@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_EVENTS } from "../utils/queries"; // Import the necessary queries
+import { ADD_TO_CART } from "../utils/mutations"; // Import the necessary mutations
 import { useNavigate } from 'react-router-dom';
 import "../styles/Home.css";
 import { Link } from "react-router-dom";
@@ -14,6 +15,7 @@ const Home = ({ user, onLogout }) => {
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
 
+  const [addToCart] = useMutation(ADD_TO_CART); // Create the mutation hook
 
   const handleSearch = (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -23,42 +25,16 @@ const Home = ({ user, onLogout }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // // Fetch user purchase history if user is logged in
-  // const { loading: userLoading, error: userError } = useQuery(GET_USER_PURCHASE_HISTORY, {
-  //   variables: { id: user?.id },
-  //   skip: !user,
-  // });
+  const handleAddToCart = (eventId) => {
+    addToCart({
+      variables: {
+        userId: user._id,
+        eventId: eventId,
+        quantity: 1, // Default quantity to 1
+      },
+    });
+  };
 
-  // Fetch events
-
-  // const handleDelete = async (eventId) => {
-  //   try {
-  //     const { data } = await deleteEvent({ variables: { id: eventId } });
-  //     if (data.deleteEvent) {
-  //       console.log("Event deleted successfully");
-  //     }
-  //   } catch (err) {
-  //     console.error("Error deleting event:", err);
-  //   }
-  // };
-  
- 
-
-
-  // // Handle loading and error states
-  // if (userLoading || eventsLoading) return <p>Loading...</p>;
-  // if (userError || eventsError) return <p>Error: {userError?.message || eventsError?.message}</p>;
-
-  // // Retrieve purchase history and created event history from the user data
-  // const purchaseHistory = userData?.user?.purchaseHistory || [];
-  // const createdEventHistory = userData?.user?.createdEventHistory || [];
-
-  // // Filter upcoming and past events from the user's purchase history
-  // const currentDate = new Date();
-  // const upcomingEvents = purchaseHistory.filter(event => new Date(event.date) > currentDate);
-  // const pastEvents = purchaseHistory.filter(event => new Date(event.date) <= currentDate);
-
-  // Filter events based on search, price, and date
   const filteredEvents = data.events.filter((event) => {
     const matchesSearch =
       event.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -147,10 +123,10 @@ const Home = ({ user, onLogout }) => {
               <p>{event.location}</p>
               <p>${event.price.toFixed(2)}</p>
               <p>Tags: {event.tags.join(', ')}</p>
+              <button onClick={() => handleAddToCart(event.id)}>Add to Cart</button>
             </a>
           </div>
         ))}
-                  {/* <button onClick={() => navigate('/testing-cart')} className="cart-button">View Cart</button> */}
 
       </div>
 
