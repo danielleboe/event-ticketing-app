@@ -76,18 +76,33 @@ const EditEvent = () => {
     }
   };
 
-  const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this event?")) {
-      try {
-        await deleteEvent({
-          variables: { id: eventId },
-        });
-        navigate('/'); // Redirect to homepage after deletion
-      } catch (error) {
-        console.error("Error deleting event:", error.message || error);
+//   const handleDelete = async () => {
+//     if (window.confirm("Are you sure you want to delete this event?")) {
+//       try {
+//         await deleteEvent({
+//           variables: { id: eventId },
+//         });
+//         navigate('/'); // Redirect to homepage after deletion
+//       } catch (error) {
+//         console.error("Error deleting event:", error.message || error);
+//       }
+//     }
+//   };
+
+const handleDelete = async () => {
+    try {
+      const { data } = await deleteEvent({ variables: { id: eventId } });
+      if (data.deleteEvent.success !== false) {
+        console.log("Event deleted:", data.deleteEvent);
+        alert(data.deleteEvent.message);
+      } else {
+        console.error("Failed to delete event:", data.deleteEvent.message);
       }
+    } catch (error) {
+      console.error("Error deleting event:", error);
     }
   };
+  
 
   return (
         <section className="event-form-container">
@@ -206,7 +221,7 @@ const EditEvent = () => {
              Update Event
             </button>
            
-              <button className="button" id="deleteButton" type="button" onClick={handleDelete} style={{ marginTop: '10px' }}>
+              <button className="button" id="deleteButton" type="button" onClick={handleDelete}>
                 Delete Event
               </button>
               </div>

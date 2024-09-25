@@ -35,8 +35,10 @@ const EventPage = ({ onAddToCart }) => {  // Accept onAddToCart as a prop
   return (
     <div className="eventContainer">
       <div className="event-page">
+        <div className="edit">
+      <button className="editButton" onClick={handleEditEvent}>Edit Event</button>
+      </div>
         <h1>{name}</h1>
-        <button className="button" onClick={handleEditEvent}>Edit Event</button>
         <p>{description}</p>
         <p><strong>Venue:</strong> {venue}</p>
         <p><strong>Address:</strong> {location}</p>

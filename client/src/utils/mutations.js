@@ -71,6 +71,19 @@ export const ADD_EVENT = gql`
 
 
 
+
+// // Mutation to delete an event
+export const DELETE_EVENT = gql`
+mutation DeleteEvent($eventId: ID!) {
+  deleteEvent(eventId: $eventId) {
+    id
+  }
+}
+`;
+
+
+
+
 // Mutation to update an existing event
 export const UPDATE_EVENT = gql`
   mutation UpdateEvent(
@@ -125,14 +138,6 @@ export const UPDATE_CART_ITEM_QUANTITY = gql`
     }`;
 
     
-// // Mutation to delete an event
-export const DELETE_EVENT = gql`
- mutation DeleteEvent($eventId: ID!) {
-    deleteEvent(eventId: $eventId) {
-      id
-    }
-  }
-`;
 
 
   

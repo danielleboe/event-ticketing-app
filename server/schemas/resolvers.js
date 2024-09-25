@@ -1,9 +1,11 @@
 const { Users, Events, Order } = require("../models");
 const { signToken } = require("../utils/auth");
 const bcrypt = require("bcrypt");
-const { AuthenticationError } = require('apollo-server-express');
+const mongoose = require('mongoose');
 
 // const jwt = require("jsonwebtoken");
+
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 const resolvers = {
   Query: {
@@ -216,62 +218,58 @@ saveOrder: async (_, { orderInput }) => {
     },
 
     
-    deleteEvent: async (_, { eventId }, { models }) => {
-      try {
-        // Find the event by ID and delete it
-        const deletedEvent = await models.Events.findByIdAndDelete(eventId);
-        
-        if (!deletedEvent) {
-          throw new Error('Event not found');
-        }
-
-        // Remove the event from all users' createdEventHistory (optional)
-        await Users.updateMany(
-          { createdEventHistory: eventId },
-          { $pull: { createdEventHistory: eventId } }
-        );
-
-        return event;
-      } catch (error) {
-        throw new Error('Error deleting event');
-      }
-    },
-
-
-    deleteEvent: async (_, { eventId }, { models }) => {
-      // Logic to delete the event using eventId
-      const deletedEvent = await models.Event.findByIdAndRemove(eventId);
-      return deletedEvent;
-    },
-    
-    // deleteEvent: async (_, { eventId }, context) => {
-    //   if (!context.user) {
-    //     throw new AuthenticationError('You must be logged in to delete an event');
-    //   }
-
+    // deleteEvent: async (_, { eventId }) => {
     //   try {
-    //     // Find the event by ID and delete it
-    //     const event = await Event.findByIdAndDelete(eventId);
+    //     // Find and delete the event by ID
+    //     const event = await Events.findByIdAndDelete(eventId);
         
     //     if (!event) {
     //       throw new Error('Event not found');
     //     }
 
-    //     // Remove the event from the user's createdEventHistory
-    //     await User.findByIdAndUpdate(
-    //       context.user._id,
-    //       { $pull: { createdEventHistory: eventId } },
-    //       { new: true }
+    //     // Remove the event from all users' createdEventHistory (optional)
+    //     await Users.updateMany(
+    //       { createdEventHistory: eventId },
+    //       { $pull: { createdEventHistory: eventId } }
     //     );
 
-    //     return event;
+    //     return event;  // Return the deleted event
     //   } catch (error) {
-    //     throw new Error('Error deleting event');
+    //     console.error('Error in deleteEvent resolver:', error);  // Log the error for debugging
+    //     throw new Error(error.message || 'Error deleting event');
     //   }
     // },
+    
 
-
-
+    deleteEvent: async (_, { eventId }) => {
+      // Log the ID received for debugging
+      console.log("Attempting to delete event with ID:", eventId);
+    
+      // Validate the event ID format
+      if (!isValidObjectId(eventId)) {
+        throw new Error('Invalid event ID format');
+      }
+    
+      try {
+        // Find and delete the event by ID
+        const event = await Events.findByIdAndDelete(eventId);
+    
+        // Check if the event was found and deleted
+        if (!event) {
+          throw new Error('Event not found');
+        }
+    
+        // Simply return the deleted event
+        return event; 
+      } catch (error) {
+        // Log the error for debugging
+        console.error('Error in deleteEvent resolver:', error);
+        throw new Error(error.message || 'Error deleting event');
+      }
+    },
+    
+    
+    
 
     createCheckoutSession: async (_, { cart }, { user }) => {
       // Create line items from the user's cart

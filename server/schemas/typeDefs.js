@@ -133,6 +133,7 @@ type Purchase {
     deleteEvent(
       eventId: ID!
     ): Event
+    
 
     addToCart(
       userId: ID!, 
