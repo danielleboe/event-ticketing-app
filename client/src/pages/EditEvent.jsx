@@ -30,13 +30,17 @@ const EditEvent = () => {
 
   useEffect(() => {
     if (data?.event) {
+
+      const formattedDate = new Date(data.event.eventDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      const formattedTime = data.event.eventTime.slice(0, 5); // Assuming eventTime is like 'HH:MM:SS', we slice it to 'HH:MM'
+
       setEventData({
         name: data.event.name,
         description: data.event.description,
         venue: data.event.venue,
         location: data.event.location,
-        eventDate: data.event.eventDate,
-        eventTime: data.event.eventTime,
+        eventDate: formattedDate,
+        eventTime: formattedTime,
         tags: data.event.tags || [],
         price: data.event.price, // Ensure price is a number
       });
@@ -95,6 +99,7 @@ const handleDelete = async (event) => {
     try {
       const { data } = await deleteEvent({ variables: { eventId: eventId } });
       console.log("Delete Result: ", data);
+       navigate('/'); // Redirect to homepage after deletion
 
       if (data.deleteEvent.success !== false) {
         console.log("Event deleted:", data.deleteEvent);

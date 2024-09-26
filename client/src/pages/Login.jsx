@@ -17,19 +17,18 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
     try {
       const { data } = await loginUser({
         variables: { email, password },
       });
 
-      console.log("Login response:", data); // Debug log
       if (data && data.loginUser && data.loginUser.user) {
         sessionStorage.setItem("authToken", data.loginUser.token);
         sessionStorage.setItem("userId", data.loginUser.user._id);
         console.log("Auth Token:", sessionStorage.getItem("authToken"));
         onLogin(data.loginUser.user);
         console.log(`loginUser.user`, data.loginUser.user);
-        console.log(`Navigating to home page...`); // Debug log
         navigate("/");
       } else {
         console.log("Unexpected response structure:", data);

@@ -25,7 +25,6 @@ const EventForm = ({ onEventDeleted }) => {
   const [addEvent] = useMutation(ADD_EVENT);
   const [updateEvent] = useMutation(UPDATE_EVENT);
   const [deleteEvent] = useMutation(DELETE_EVENT);
-console.log(`eventId`, eventId);
   // Fetch existing event data if editing
   const { data } = useQuery(GET_EVENT, {
     variables: { id: eventId },
@@ -52,47 +51,9 @@ console.log(`eventId`, eventId);
     }));
   };
 
-  // Handle form submission
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   console.log(`eventid`, eventId);
-  //   console.log(`eventdata`, eventData);
-
-  //   try {
-  //     let response;
-  //     if (eventId) {
-  //       // Update existing event
-  //       response = await updateEvent({
-  //         variables: { id: eventId, ...eventData },
-  //       });
-  //     } else {
-  //       // Create a new event
-  //       response = await addEvent({
-  //         variables: eventData,
-  //       });
-  //       const createdEventId = response?.data?.addEvent?.id;
-  //       setNewEventId(createdEventId);
-  //     }
-
-  //     const redirectId = newEventId || eventId || response?.data?.addEvent?.id;
-
-  //     // Navigate to the event page using the appropriate ID
-  //     if (redirectId) {
-  //       navigate(`/events/${redirectId}`);
-  //     } else {
-  //       console.error("Failed to get event ID");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error saving event:", error);
-  //   }
-  // };
-
-
   //debugging code - temp
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`eventid`, eventId);
-    console.log(`eventdata`, eventData);
   
     try {
       let response;
@@ -121,8 +82,7 @@ console.log(`eventId`, eventId);
           refetchQueries: [{ query: GET_EVENT }],
           awaitRefetchQueries: true,
         });
-        console.log(`data!!!!!!!`, response.data?.addEvent?.id);
-  
+       
         // Get the new event ID
         const createdEventId = response.data?.addEvent?.id;
         setNewEventId(createdEventId);

@@ -5,7 +5,6 @@ import "../styles/Checkout.css";
 
 const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(stripePublicKey);
-console.log("Stripe Public Key:", stripePublicKey); // Check the output
 
 const Checkout = ({ cartItems }) => {
   const handleCheckout = async () => {

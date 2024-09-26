@@ -18,8 +18,7 @@ const Navbar = ({ user, onLogout }) => {
     navigate("/login"); // Redirect to the login page
   };
   
-  //const isLoggedIn = !!user;
-  const isLoggedIn = !user;
+  const isLoggedIn = !!user;
 
   useEffect(() => {
     console.log(isLoggedIn ? "Logged In" : "Logged Out");
@@ -32,6 +31,8 @@ const Navbar = ({ user, onLogout }) => {
       </div>
       
       <ul className={`nav-links ${isNavOpen ? "active" : ""}`}>
+
+        
         <li>
           <Link to="/events/new">Add an Event</Link>
         </li>
@@ -39,9 +40,9 @@ const Navbar = ({ user, onLogout }) => {
         <li>
           <Link to="/">Search</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/profile">Profile</Link>
-        </li>
+        </li> */}
         <li>
           <Link to="/cart">Cart</Link>
         </li>
