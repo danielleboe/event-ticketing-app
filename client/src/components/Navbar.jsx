@@ -18,7 +18,8 @@ const Navbar = ({ user, onLogout }) => {
     navigate("/login"); // Redirect to the login page
   };
   
-  const isLoggedIn = !!user;
+  //const isLoggedIn = !!user;
+  const isLoggedIn = !user;
 
   useEffect(() => {
     console.log(isLoggedIn ? "Logged In" : "Logged Out");

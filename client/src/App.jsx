@@ -38,7 +38,7 @@ function App() {
           navigate("/login");
         });
     } else {
-      navigate("/login");
+      // navigate("/login");
     }
   }, [navigate]);
 
@@ -67,9 +67,9 @@ function App() {
 
   return (
     <>
-      <Navbar user={user} onLogout={handleLogout} />
+      <Navbar user={isLoggedIn ? user : null} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
+        <Route path="/" element={<Home />} />
         <Route 
           path="/profile" 
           element={isLoggedIn ? <UserProfile user={user} /> : <Navigate to="/login" />} 

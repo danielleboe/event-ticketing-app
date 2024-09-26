@@ -89,12 +89,17 @@ const EditEvent = () => {
 //     }
 //   };
 
-const handleDelete = async () => {
+const handleDelete = async (event) => {
+  event.preventDefault();
+  console.log("Current Event :", eventId);
     try {
-      const { data } = await deleteEvent({ variables: { id: eventId } });
+      const { data } = await deleteEvent({ variables: { eventId: eventId } });
+      console.log("Delete Result: ", data);
+
       if (data.deleteEvent.success !== false) {
         console.log("Event deleted:", data.deleteEvent);
-        alert(data.deleteEvent.message);
+        alert("Event Deleted!");
+        // Possibly redirect to another page
       } else {
         console.error("Failed to delete event:", data.deleteEvent.message);
       }

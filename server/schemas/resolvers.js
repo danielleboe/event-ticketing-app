@@ -253,7 +253,7 @@ saveOrder: async (_, { orderInput }) => {
       try {
         // Find and delete the event by ID
         const event = await Events.findByIdAndDelete(eventId);
-    
+        console.log("Event: ", event);
         // Check if the event was found and deleted
         if (!event) {
           throw new Error('Event not found');
