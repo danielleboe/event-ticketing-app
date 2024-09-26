@@ -57,6 +57,6 @@ MIT License
 
 ## Contributors
 - Danielle Boenisch danielleboenisch@gmail.com https://github.com/danielleboe
-- Chris Williams
 - Joey Sandoval
+- Chris Williams
 - Kyle Sunday
