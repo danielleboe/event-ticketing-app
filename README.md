@@ -1,8 +1,9 @@
 # event-ticketing-app
 Event ticketing application
 
-Live application:
 Repo: https://github.com/danielleboe/event-ticketing-app
+Live Application: https://event-ticketing-app.onrender.com
+Presentation: https://docs.google.com/presentation/d/1u_2-lowLpyPXw5I8ngZwS6NYtmAhqYnb-P_dNkC8Ceo/edit#slide=id.g29f43f0a72_0_0
 
 # Product Name
 StagePass event ticketing platform
