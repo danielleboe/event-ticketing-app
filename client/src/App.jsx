@@ -22,7 +22,7 @@ function App() {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ id: '1', name: 'John Doe' });
-      }, 100000);
+      }, 0);
     });
   };
 
@@ -38,14 +38,17 @@ function App() {
           navigate("/login");
         });
     } else {
-      navigate("/login");
+      // navigate("/login");
     }
   }, [navigate]);
 
-  const handleLogin = (user) => {
-    setUser(user);
-    console.log('User logged in:', user);
-  };
+// App.jsx
+const handleLogin = (user, token) => {
+  setUser(user);
+  sessionStorage.setItem('authToken', token); // Store the token
+  console.log('User logged in:', user);
+};
+
 
   const handleLogout = () => {
     setUser(null);
@@ -62,24 +65,30 @@ function App() {
 
   const handleAddToCart = (eventId, quantity) => {
     setCart((prevCart) => [...prevCart, { eventId, quantity }]);
-    console.log(`Added ${quantity} tickets for event ${eventId} to cart.`);
   };
+
+  useEffect(() => {
+    if (!user) {
+      console.log('User is null on EventPage'); // Log if the user is null
+    }
+  }, [user]);
+  
 
   return (
     <>
       <Navbar user={user} onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home user={isLoggedIn ? user : null} onLogout={handleLogout} />} />
-        <Route 
+        {/* <Route 
           path="/profile" 
           element={isLoggedIn ? <UserProfile user={user} /> : <Navigate to="/login" />} 
-        />
+        /> */}
         <Route
          path="/login" 
         element={<Login onLogin={handleLogin} />} />
         <Route
          path="/events/:id" 
-        element={<EventPage onAddToCart={handleAddToCart} />} />
+        element={<EventPage onAddToCart={handleAddToCart} user={user}/>} />
         <Route 
         path="/events/new" 
         element={isLoggedIn ? <CreateEvent /> : <Navigate to="/login" />} />

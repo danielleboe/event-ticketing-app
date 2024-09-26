@@ -242,8 +242,6 @@ saveOrder: async (_, { orderInput }) => {
     
 
     deleteEvent: async (_, { eventId }) => {
-      // Log the ID received for debugging
-      console.log("Attempting to delete event with ID:", eventId);
     
       // Validate the event ID format
       if (!isValidObjectId(eventId)) {
@@ -253,7 +251,6 @@ saveOrder: async (_, { orderInput }) => {
       try {
         // Find and delete the event by ID
         const event = await Events.findByIdAndDelete(eventId);
-    
         // Check if the event was found and deleted
         if (!event) {
           throw new Error('Event not found');
